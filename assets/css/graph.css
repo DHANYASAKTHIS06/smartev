@@ -1,0 +1,86 @@
+/* 
+ * Neo4j Graph Visualizer Stylesheet
+ */
+
+.graph-container {
+    background: var(--navy-dark);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    color: var(--text-white);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--navy-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.graph-canvas-wrapper {
+    width: 100%;
+    height: 520px;
+    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#neo4jCanvas {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+}
+
+#neo4jCanvas:active {
+    cursor: grabbing;
+}
+
+.graph-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.graph-legend {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.dot-ev { background: #00d176; box-shadow: 0 0 10px rgba(0,209,118,0.6); }
+.dot-location { background: #3b82f6; box-shadow: 0 0 10px rgba(59,130,246,0.6); }
+.dot-station { background: #a855f7; box-shadow: 0 0 10px rgba(168,85,247,0.6); }
+.dot-point { background: #f59e0b; box-shadow: 0 0 10px rgba(245,158,11,0.6); }
+.dot-road { background: #64748b; }
+
+.cypher-code-block {
+    background: #090d16;
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    overflow-x: auto;
+    margin-top: 1.25rem;
+}
+
+.cypher-keyword { color: #f43f5e; font-weight: bold; }
+.cypher-label { color: #34d399; }
+.cypher-rel { color: #fbbf24; }
