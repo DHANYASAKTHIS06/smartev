@@ -1,0 +1,21 @@
+{
+    "name": "smart-ev/route-optimization-backend",
+    "description": "Smart EV Charging Network Route Optimization and Predictive Demand Management Backend using PHP 8 and Neo4j AuraDB",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "laudis/neo4j-php-client": "^2.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Config\\": "config/",
+            "Core\\": "core/",
+            "Models\\": "models/",
+            "Controllers\\": "controllers/",
+            "Services\\": "services/"
+        }
+    }
+}

@@ -1,0 +1,5 @@
+.env
+vendor/
+.ds_store
+*.log
+.vercel
