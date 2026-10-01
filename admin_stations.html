@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Charging Stations - Smart EV</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar" style="background:#0a0f1d; border-bottom:1px solid #1f2937;">
+        <div class="container nav-container">
+            <a href="admin_dashboard.html" class="logo text-white">
+                <i class="fa-solid fa-bolt-lightning text-primary"></i> Smart<span>EV</span> <span class="badge badge-primary text-xs ml-2">ADMIN</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="admin_dashboard.html" class="nav-link"><i class="fa-solid fa-gauge"></i> Overview</a></li>
+                <li><a href="admin_users.html" class="nav-link"><i class="fa-solid fa-users"></i> Users</a></li>
+                <li><a href="admin_evs.html" class="nav-link"><i class="fa-solid fa-car"></i> EVs</a></li>
+                <li><a href="admin_stations.html" class="nav-link active"><i class="fa-solid fa-charging-station"></i> Stations</a></li>
+                <li><a href="admin_chargers.html" class="nav-link"><i class="fa-solid fa-plug-circle-bolt"></i> Chargers</a></li>
+                <li><a href="admin_road_network.html" class="nav-link"><i class="fa-solid fa-road"></i> Roads</a></li>
+                <li><a href="admin_demand.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Demand</a></li>
+                <li><a href="admin_reports.html" class="nav-link"><i class="fa-solid fa-file-contract"></i> Reports</a></li>
+            </ul>
+            <div class="nav-auth">
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> User App</a>
+                <a href="index.html" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-power-off"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header bg-dark-navy text-white py-4">
+        <div class="container d-flex justify-between align-center">
+            <div>
+                <h1 class="h2 mb-1"><i class="fa-solid fa-charging-station text-primary"></i> Charging Station Nodes Directory</h1>
+                <p class="text-muted-light mb-0">Manage charging hub graph nodes, operating statuses, pricing tariffs, and live availability</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="showToast('Create Station Node modal opened', 'info')"><i class="fa-solid fa-plus mr-1"></i> Add Station Node</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-between align-center py-3">
+                <input type="text" placeholder="Search station name, city or operator..." class="form-control" style="max-width:320px;">
+                <div class="text-sm text-muted"><strong>250 Station Nodes</strong> in Neo4j AuraDB</div>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Station ID</th>
+                            <th>Hub Name</th>
+                            <th>City / Location</th>
+                            <th>Operator</th>
+                            <th>Tariff</th>
+                            <th>Chargers (Avail/Total)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>STN-CBE-01</code></td>
+                            <td><strong>Coimbatore Prozone Fast Charging Hub</strong></td>
+                            <td>Coimbatore</td>
+                            <td>Tata Power EZ Charge</td>
+                            <td><strong>₹18.50</strong>/kWh</td>
+                            <td><span class="badge badge-success">4 / 6 Avail</span></td>
+                            <td><span class="badge badge-success">OPERATIONAL</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>STN-TPR-01</code></td>
+                            <td><strong>Tiruppur Textile Express Hub</strong></td>
+                            <td>Tiruppur</td>
+                            <td>Zeon Electric</td>
+                            <td><strong>₹19.00</strong>/kWh</td>
+                            <td><span class="badge badge-success">3 / 4 Avail</span></td>
+                            <td><span class="badge badge-success">OPERATIONAL</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>STN-ERD-01</code></td>
+                            <td><strong>Erode Green Fast Charging Hub</strong></td>
+                            <td>Erode</td>
+                            <td>ChargeZone</td>
+                            <td><strong>₹17.50</strong>/kWh</td>
+                            <td><span class="badge badge-success">4 / 4 Avail</span></td>
+                            <td><span class="badge badge-success">OPERATIONAL</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>STN-SLM-01</code></td>
+                            <td><strong>Salem NH-44 Supercharge Hub</strong></td>
+                            <td>Salem</td>
+                            <td>Tata Power EZ Charge</td>
+                            <td><strong>₹19.50</strong>/kWh</td>
+                            <td><span class="badge badge-danger">1 / 8 Avail</span></td>
+                            <td><span class="badge badge-warning">HIGH LOAD</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>STN-OOT-01</code></td>
+                            <td><strong>Ooty Hill Eco Station</strong></td>
+                            <td>Ooty</td>
+                            <td>Kazam EV</td>
+                            <td><strong>₹16.00</strong>/kWh</td>
+                            <td><span class="badge badge-success">2 / 2 Avail</span></td>
+                            <td><span class="badge badge-success">OPERATIONAL</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer bg-dark text-white py-4 mt-5">
+        <div class="container text-center text-sm text-muted">
+            <p class="mb-0">© 2026 Smart EV Route & Demand Platform. Core PHP 8+ & Neo4j AuraDB Cloud Admin Console.</p>
+        </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

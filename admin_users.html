@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - User Management - Smart EV</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar" style="background:#0a0f1d; border-bottom:1px solid #1f2937;">
+        <div class="container nav-container">
+            <a href="admin_dashboard.html" class="logo text-white">
+                <i class="fa-solid fa-bolt-lightning text-primary"></i> Smart<span>EV</span> <span class="badge badge-primary text-xs ml-2">ADMIN</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="admin_dashboard.html" class="nav-link"><i class="fa-solid fa-gauge"></i> Overview</a></li>
+                <li><a href="admin_users.html" class="nav-link active"><i class="fa-solid fa-users"></i> Users</a></li>
+                <li><a href="admin_evs.html" class="nav-link"><i class="fa-solid fa-car"></i> EVs</a></li>
+                <li><a href="admin_stations.html" class="nav-link"><i class="fa-solid fa-charging-station"></i> Stations</a></li>
+                <li><a href="admin_chargers.html" class="nav-link"><i class="fa-solid fa-plug-circle-bolt"></i> Chargers</a></li>
+                <li><a href="admin_road_network.html" class="nav-link"><i class="fa-solid fa-road"></i> Roads</a></li>
+                <li><a href="admin_demand.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Demand</a></li>
+                <li><a href="admin_reports.html" class="nav-link"><i class="fa-solid fa-file-contract"></i> Reports</a></li>
+            </ul>
+            <div class="nav-auth">
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> User App</a>
+                <a href="index.html" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-power-off"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header bg-dark-navy text-white py-4">
+        <div class="container d-flex justify-between align-center">
+            <div>
+                <h1 class="h2 mb-1"><i class="fa-solid fa-users-gear text-primary"></i> Registered EV Users Directory</h1>
+                <p class="text-muted-light mb-0">Manage driver profiles, Neo4j <code>:User</code> nodes, and permission roles</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="showToast('Add User dialog opened', 'info')"><i class="fa-solid fa-user-plus mr-1"></i> Create User Node</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-between align-center py-3">
+                <input type="text" placeholder="Search by name, email or node ID..." class="form-control" style="max-width:320px;">
+                <div class="text-sm text-muted">Showing <strong>5 of 1,420</strong> Neo4j User Nodes</div>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Full Name</th>
+                            <th>Email Address</th>
+                            <th>Role</th>
+                            <th>Registered EV</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>USR-001</code></td>
+                            <td><strong>Dhanya Sakthi</strong></td>
+                            <td>dhanya.sakthi@gmail.com</td>
+                            <td><span class="badge badge-primary">ADMIN</span></td>
+                            <td>Tata Nexon EV Max</td>
+                            <td><span class="badge badge-success">ACTIVE</span></td>
+                            <td>
+                                <button class="btn btn-xs btn-outline-primary" onclick="showToast('User modified', 'info')">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>USR-002</code></td>
+                            <td><strong>Alex Rivera</strong></td>
+                            <td>alex.rivera@evmobility.io</td>
+                            <td><span class="badge badge-secondary">USER</span></td>
+                            <td>Tesla Model 3 LR</td>
+                            <td><span class="badge badge-success">ACTIVE</span></td>
+                            <td>
+                                <button class="btn btn-xs btn-outline-primary" onclick="showToast('User modified', 'info')">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>USR-003</code></td>
+                            <td><strong>Kavitha Raman</strong></td>
+                            <td>kavitha.r@gmail.com</td>
+                            <td><span class="badge badge-secondary">USER</span></td>
+                            <td>MG ZS EV</td>
+                            <td><span class="badge badge-success">ACTIVE</span></td>
+                            <td>
+                                <button class="btn btn-xs btn-outline-primary" onclick="showToast('User modified', 'info')">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>USR-004</code></td>
+                            <td><strong>Manoj Kumar</strong></td>
+                            <td>manoj.k@outlook.com</td>
+                            <td><span class="badge badge-secondary">USER</span></td>
+                            <td>Hyundai Ioniq 5</td>
+                            <td><span class="badge badge-success">ACTIVE</span></td>
+                            <td>
+                                <button class="btn btn-xs btn-outline-primary" onclick="showToast('User modified', 'info')">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>USR-005</code></td>
+                            <td><strong>Priya Sundaram</strong></td>
+                            <td>priya.s@yahoo.com</td>
+                            <td><span class="badge badge-secondary">USER</span></td>
+                            <td>Mahindra XUV400</td>
+                            <td><span class="badge badge-warning">SUSPENDED</span></td>
+                            <td>
+                                <button class="btn btn-xs btn-outline-primary" onclick="showToast('User modified', 'info')">Edit</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer bg-dark text-white py-4 mt-5">
+        <div class="container text-center text-sm text-muted">
+            <p class="mb-0">© 2026 Smart EV Route & Demand Platform. Core PHP 8+ & Neo4j AuraDB Cloud Admin Console.</p>
+        </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

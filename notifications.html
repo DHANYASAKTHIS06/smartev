@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications & Alerts - Smart EV Route & Demand Platform</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-bolt-lightning text-primary"></i> Smart<span>EV</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="route_planner.html" class="nav-link"><i class="fa-solid fa-route"></i> Route Planner</a></li>
+                <li><a href="stations.html" class="nav-link"><i class="fa-solid fa-charging-station"></i> Stations</a></li>
+                <li><a href="demand.html" class="nav-link"><i class="fa-solid fa-brain"></i> Demand AI</a></li>
+                <li><a href="notifications.html" class="nav-link active"><i class="fa-solid fa-bell"></i> Alerts <span class="badge badge-danger">3</span></a></li>
+            </ul>
+            <div class="nav-auth">
+                <div class="user-pill">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="avatar-sm">
+                    <span class="user-name">Dhanya Sakthi</span>
+                </div>
+                <a href="index.html" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-right-from-bracket"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header bg-dark-navy text-white py-4">
+        <div class="container d-flex justify-between align-center">
+            <div>
+                <h1 class="h2 mb-1"><i class="fa-solid fa-bell text-primary"></i> Real-Time Notifications & Smart Alerts</h1>
+                <p class="text-muted-light mb-0">Neo4j graph-triggered network alerts, battery threshold triggers, and dynamic reroute advisories.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-sm btn-outline-light" onclick="markAllAsRead()"><i class="fa-solid fa-check-double"></i> Mark All as Read</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <div class="grid grid-3-1">
+            <!-- Feed -->
+            <div class="notifications-feed">
+                <!-- Alert 1 -->
+                <div class="card card-hover mb-3 border-left-danger">
+                    <div class="card-body d-flex gap-3 align-start">
+                        <div class="alert-icon-box bg-danger-subtle text-danger">
+                            <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <div class="d-flex justify-between align-center mb-1">
+                                <h4 class="h5 mb-0 text-dark">High Grid Congestion Detected: Salem NH-44 Hub</h4>
+                                <span class="badge badge-danger">CRITICAL</span>
+                            </div>
+                            <p class="text-muted mb-2">Demand prediction index reached <strong>88%</strong>. Expected queue delay is currently <strong>35 mins</strong>. Alternative hub recommended: <em>Erode Green Fast Charging Hub</em> (8 mins delay).</p>
+                            <div class="d-flex justify-between align-center text-sm">
+                                <span class="text-muted"><i class="fa-regular fa-clock"></i> 5 minutes ago</span>
+                                <a href="dynamic_reroute.html" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-arrows-split-up-and-left"></i> View Reroute</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alert 2 -->
+                <div class="card card-hover mb-3 border-left-warning">
+                    <div class="card-body d-flex gap-3 align-start">
+                        <div class="alert-icon-box bg-warning-subtle text-warning">
+                            <i class="fa-solid fa-battery-quarter fa-lg"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <div class="d-flex justify-between align-center mb-1">
+                                <h4 class="h5 mb-0 text-dark">Low SoC Range Alert</h4>
+                                <span class="badge badge-warning">BATTERY ADVISORY</span>
+                            </div>
+                            <p class="text-muted mb-2">Your Tata Nexon EV SoC is at <strong>24%</strong> (estimated range: 74 km). The nearest high-speed 60kW DC CCS2 charger is <strong>Coimbatore Prozone Fast Charger</strong> (6.4 km away).</p>
+                            <div class="d-flex justify-between align-center text-sm">
+                                <span class="text-muted"><i class="fa-regular fa-clock"></i> 22 minutes ago</span>
+                                <a href="stations.html" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-location-arrow"></i> Navigate Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alert 3 -->
+                <div class="card card-hover mb-3 border-left-success">
+                    <div class="card-body d-flex gap-3 align-start">
+                        <div class="alert-icon-box bg-success-subtle text-success">
+                            <i class="fa-solid fa-circle-check fa-lg"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <div class="d-flex justify-between align-center mb-1">
+                                <h4 class="h5 mb-0 text-dark">Charging Session Completed</h4>
+                                <span class="badge badge-success">COMPLETED</span>
+                            </div>
+                            <p class="text-muted mb-2">Session at <strong>Tiruppur Textile Express Hub (60kW CCS2)</strong> finished successfully. Added <strong>28.4 kWh</strong> (+65% SoC). Total billed amount: <strong>₹511.20</strong>.</p>
+                            <div class="d-flex justify-between align-center text-sm">
+                                <span class="text-muted"><i class="fa-regular fa-clock"></i> 3 hours ago</span>
+                                <a href="trip_history.html" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-receipt"></i> View Invoice</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alert 4 -->
+                <div class="card card-hover mb-3 border-left-info">
+                    <div class="card-body d-flex gap-3 align-start">
+                        <div class="alert-icon-box bg-info-subtle text-info">
+                            <i class="fa-solid fa-tag fa-lg"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <div class="d-flex justify-between align-center mb-1">
+                                <h4 class="h5 mb-0 text-dark">Off-Peak Tariff Window Active</h4>
+                                <span class="badge badge-info">OFF-PEAK</span>
+                            </div>
+                            <p class="text-muted mb-2">Off-peak green energy tariff active in Coimbatore region (₹14.50/kWh instead of ₹19.00/kWh). Save up to 25% by charging before 17:00 IST.</p>
+                            <div class="d-flex justify-between align-center text-sm">
+                                <span class="text-muted"><i class="fa-regular fa-clock"></i> Yesterday, 14:00</span>
+                                <a href="calculator.html" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-calculator"></i> Calculate Savings</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings Card -->
+            <div class="settings-sidebar">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-white">
+                        <h3 class="h6 mb-0 text-dark font-weight-bold"><i class="fa-solid fa-sliders text-primary"></i> Alert Preferences</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check-group mb-3">
+                            <label class="d-flex justify-between align-center cursor-pointer">
+                                <span><i class="fa-solid fa-battery-half text-warning mr-2"></i> Low SoC Triggers (< 25%)</span>
+                                <input type="checkbox" checked class="custom-toggle">
+                            </label>
+                        </div>
+                        <div class="form-check-group mb-3">
+                            <label class="d-flex justify-between align-center cursor-pointer">
+                                <span><i class="fa-solid fa-road text-danger mr-2"></i> Real-Time Reroute Pushes</span>
+                                <input type="checkbox" checked class="custom-toggle">
+                            </label>
+                        </div>
+                        <div class="form-check-group mb-3">
+                            <label class="d-flex justify-between align-center cursor-pointer">
+                                <span><i class="fa-solid fa-bolt text-success mr-2"></i> Green Tariff Discounts</span>
+                                <input type="checkbox" checked class="custom-toggle">
+                            </label>
+                        </div>
+                        <div class="form-check-group mb-4">
+                            <label class="d-flex justify-between align-center cursor-pointer">
+                                <span><i class="fa-solid fa-clock text-info mr-2"></i> High Queue Delay Alerts</span>
+                                <input type="checkbox" checked class="custom-toggle">
+                            </label>
+                        </div>
+                        <button class="btn btn-primary btn-block"><i class="fa-solid fa-floppy-disk"></i> Save Preferences</button>
+                    </div>
+                </div>
+
+                <div class="card bg-dark-navy text-white p-4 text-center">
+                    <i class="fa-solid fa-mobile-screen-button fa-3x text-primary mb-3"></i>
+                    <h4 class="h5 mb-2">WhatsApp & SMS Sync</h4>
+                    <p class="text-sm text-muted-light mb-3">Receive emergency low-battery and optimal reroute links straight to your phone.</p>
+                    <button class="btn btn-outline-light btn-sm"><i class="fa-brands fa-whatsapp text-success"></i> Connect WhatsApp</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-white py-4 mt-5">
+        <div class="container text-center text-sm text-muted">
+            <p class="mb-0">© 2026 Smart EV Route & Demand Platform. Powered by Core PHP 8+ & Neo4j AuraDB Cloud.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        function markAllAsRead() {
+            document.querySelectorAll('.badge-danger, .badge-warning').forEach(b => {
+                b.className = 'badge badge-secondary';
+                b.innerText = 'READ';
+            });
+            const pill = document.querySelector('.nav-menu .badge-danger');
+            if (pill) pill.style.display = 'none';
+            showToast('All notifications marked as read', 'success');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Charging Points - Smart EV</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar" style="background:#0a0f1d; border-bottom:1px solid #1f2937;">
+        <div class="container nav-container">
+            <a href="admin_dashboard.html" class="logo text-white">
+                <i class="fa-solid fa-bolt-lightning text-primary"></i> Smart<span>EV</span> <span class="badge badge-primary text-xs ml-2">ADMIN</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="admin_dashboard.html" class="nav-link"><i class="fa-solid fa-gauge"></i> Overview</a></li>
+                <li><a href="admin_users.html" class="nav-link"><i class="fa-solid fa-users"></i> Users</a></li>
+                <li><a href="admin_evs.html" class="nav-link"><i class="fa-solid fa-car"></i> EVs</a></li>
+                <li><a href="admin_stations.html" class="nav-link"><i class="fa-solid fa-charging-station"></i> Stations</a></li>
+                <li><a href="admin_chargers.html" class="nav-link active"><i class="fa-solid fa-plug-circle-bolt"></i> Chargers</a></li>
+                <li><a href="admin_road_network.html" class="nav-link"><i class="fa-solid fa-road"></i> Roads</a></li>
+                <li><a href="admin_demand.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Demand</a></li>
+                <li><a href="admin_reports.html" class="nav-link"><i class="fa-solid fa-file-contract"></i> Reports</a></li>
+            </ul>
+            <div class="nav-auth">
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> User App</a>
+                <a href="index.html" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-power-off"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header bg-dark-navy text-white py-4">
+        <div class="container d-flex justify-between align-center">
+            <div>
+                <h1 class="h2 mb-1"><i class="fa-solid fa-plug-circle-bolt text-primary"></i> Charging Point Guns & Dispensers</h1>
+                <p class="text-muted-light mb-0">Monitor <code>:ChargingPoint</code> hardware nodes, live power outputs (kW), and connector telemetry</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="showToast('Add Charger Point modal opened', 'info')"><i class="fa-solid fa-plus mr-1"></i> Provision Point</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-between align-center py-3">
+                <input type="text" placeholder="Search charger ID or station..." class="form-control" style="max-width:320px;">
+                <div class="text-sm text-muted"><strong>850 Charging Points</strong> Active in Graph</div>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Charger ID</th>
+                            <th>Parent Station</th>
+                            <th>Power Rating</th>
+                            <th>Gun Standard</th>
+                            <th>Live Status</th>
+                            <th>Current Vehicle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>CP-CBE-01-A</code></td>
+                            <td>Coimbatore Prozone Fast Hub</td>
+                            <td><strong>120 kW DC</strong></td>
+                            <td><span class="badge badge-primary">CCS2</span></td>
+                            <td><span class="badge badge-success">AVAILABLE</span></td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td><code>CP-CBE-01-B</code></td>
+                            <td>Coimbatore Prozone Fast Hub</td>
+                            <td><strong>60 kW DC</strong></td>
+                            <td><span class="badge badge-primary">CCS2</span></td>
+                            <td><span class="badge badge-warning">CHARGING (78%)</span></td>
+                            <td><code>EV-TN-01 (Tata Nexon)</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>CP-TPR-01-A</code></td>
+                            <td>Tiruppur Textile Express</td>
+                            <td><strong>60 kW DC</strong></td>
+                            <td><span class="badge badge-primary">CCS2</span></td>
+                            <td><span class="badge badge-success">AVAILABLE</span></td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td><code>CP-SLM-01-A</code></td>
+                            <td>Salem NH-44 Hub</td>
+                            <td><strong>150 kW DC</strong></td>
+                            <td><span class="badge badge-primary">CCS2 Ultra</span></td>
+                            <td><span class="badge badge-warning">CHARGING (45%)</span></td>
+                            <td><code>EV-TN-03 (Ioniq 5)</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>CP-SLM-01-D</code></td>
+                            <td>Salem NH-44 Hub</td>
+                            <td><strong>22 kW AC</strong></td>
+                            <td><span class="badge badge-secondary">Type 2 AC</span></td>
+                            <td><span class="badge badge-success">AVAILABLE</span></td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer bg-dark text-white py-4 mt-5">
+        <div class="container text-center text-sm text-muted">
+            <p class="mb-0">© 2026 Smart EV Route & Demand Platform. Core PHP 8+ & Neo4j AuraDB Cloud Admin Console.</p>
+        </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

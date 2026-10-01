@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Road Network Topology - Smart EV</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar" style="background:#0a0f1d; border-bottom:1px solid #1f2937;">
+        <div class="container nav-container">
+            <a href="admin_dashboard.html" class="logo text-white">
+                <i class="fa-solid fa-bolt-lightning text-primary"></i> Smart<span>EV</span> <span class="badge badge-primary text-xs ml-2">ADMIN</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="admin_dashboard.html" class="nav-link"><i class="fa-solid fa-gauge"></i> Overview</a></li>
+                <li><a href="admin_users.html" class="nav-link"><i class="fa-solid fa-users"></i> Users</a></li>
+                <li><a href="admin_evs.html" class="nav-link"><i class="fa-solid fa-car"></i> EVs</a></li>
+                <li><a href="admin_stations.html" class="nav-link"><i class="fa-solid fa-charging-station"></i> Stations</a></li>
+                <li><a href="admin_chargers.html" class="nav-link"><i class="fa-solid fa-plug-circle-bolt"></i> Chargers</a></li>
+                <li><a href="admin_road_network.html" class="nav-link active"><i class="fa-solid fa-road"></i> Roads</a></li>
+                <li><a href="admin_demand.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Demand</a></li>
+                <li><a href="admin_reports.html" class="nav-link"><i class="fa-solid fa-file-contract"></i> Reports</a></li>
+            </ul>
+            <div class="nav-auth">
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> User App</a>
+                <a href="index.html" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-power-off"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header bg-dark-navy text-white py-4">
+        <div class="container d-flex justify-between align-center">
+            <div>
+                <h1 class="h2 mb-1"><i class="fa-solid fa-diagram-project text-primary"></i> Road Network Graph Topology</h1>
+                <p class="text-muted-light mb-0">Manage <code>:Location</code> nodes and <code>-[:CONNECTED_TO]-></code> relationships with dynamic weights</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="showToast('Create Graph Edge modal opened', 'info')"><i class="fa-solid fa-plus mr-1"></i> Add Road Segment</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-between align-center py-3">
+                <input type="text" placeholder="Search origin or destination node..." class="form-control" style="max-width:320px;">
+                <div class="text-sm text-muted"><strong>30 Inter-city Road Segments</strong> in Graph</div>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Origin Node</th>
+                            <th>Destination Node</th>
+                            <th>Highway Name</th>
+                            <th>Distance</th>
+                            <th>Travel Time</th>
+                            <th>Energy Cost</th>
+                            <th>Live Traffic Factor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-secondary">Coimbatore</span></td>
+                            <td><span class="badge badge-secondary">Tiruppur</span></td>
+                            <td><strong>NH-544 (Avinashi Rd)</strong></td>
+                            <td>55 km</td>
+                            <td>60 mins</td>
+                            <td>8.5 kWh</td>
+                            <td><span class="badge badge-success">1.0x (Normal)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-secondary">Tiruppur</span></td>
+                            <td><span class="badge badge-secondary">Erode</span></td>
+                            <td><strong>SH-196 / NH-544</strong></td>
+                            <td>50 km</td>
+                            <td>50 mins</td>
+                            <td>7.5 kWh</td>
+                            <td><span class="badge badge-success">1.0x (Normal)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-secondary">Erode</span></td>
+                            <td><span class="badge badge-secondary">Salem</span></td>
+                            <td><strong>NH-544 (Bypass)</strong></td>
+                            <td>60 km</td>
+                            <td>65 mins</td>
+                            <td>9.0 kWh</td>
+                            <td><span class="badge badge-warning">1.35x (Congestion)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-secondary">Coimbatore</span></td>
+                            <td><span class="badge badge-secondary">Mettupalayam</span></td>
+                            <td><strong>NH-181 (Ooty Rd)</strong></td>
+                            <td>35 km</td>
+                            <td>45 mins</td>
+                            <td>5.5 kWh</td>
+                            <td><span class="badge badge-success">1.0x (Normal)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-secondary">Mettupalayam</span></td>
+                            <td><span class="badge badge-secondary">Ooty</span></td>
+                            <td><strong>Ghat Road (NH-181)</strong></td>
+                            <td>52 km</td>
+                            <td>90 mins</td>
+                            <td>14.2 kWh (Uphill)</td>
+                            <td><span class="badge badge-warning">1.2x (Ghat Flow)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer bg-dark text-white py-4 mt-5">
+        <div class="container text-center text-sm text-muted">
+            <p class="mb-0">© 2026 Smart EV Route & Demand Platform. Core PHP 8+ & Neo4j AuraDB Cloud Admin Console.</p>
+        </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

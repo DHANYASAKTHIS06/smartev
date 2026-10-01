@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battery-Aware Routing | Smart EV RouteOpt Neo4j</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/graph.css">
+
+    <script>
+        window.BACKEND_API_URL = "https://smartev-1.onrender.com";
+    </script>
+</head>
+<body>
+
+<div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="appSidebar" style="position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-width); background: var(--navy-dark); color: var(--text-white); z-index: 1100; transition: var(--transition); display: flex; flex-direction: column; border-right: 1px solid var(--navy-light);">
+        <div style="padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+            <a href="dashboard.html" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
+                <div style="width: 38px; height: 38px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--navy-dark); font-weight: bold;">⚡</div>
+                <div class="sidebar-brand-text">
+                    <span style="font-family: var(--font-heading); font-weight: 800; font-size: 1.15rem; color: #ffffff;">EV-SmartRoute</span>
+                    <span style="display: block; font-size: 0.65rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Neo4j Mobility</span>
+                </div>
+            </a>
+            <button id="sidebarToggle" style="background: none; border: none; color: var(--text-light); cursor: pointer; font-size: 1.2rem;">◀</button>
+        </div>
+
+        <div style="padding: 1rem 0; flex: 1; overflow-y: auto;">
+            <div style="padding: 0 1.25rem 0.5rem 1.25rem; font-size: 0.7rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.8px;">Main Menu</div>
+
+            <ul style="list-style: none; margin: 0; padding: 0;">
+                <li><a href="dashboard.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>📊</span> <span class="nav-label">Dashboard</span></a></li>
+                <li><a href="route_planner.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🗺️</span> <span class="nav-label">Plan Journey</span></a></li>
+                <li><a href="battery_routing.html" class="sidebar-link active" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🔋</span> <span class="nav-label">Battery Routing</span></a></li>
+                <li><a href="stations.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🔌</span> <span class="nav-label">Charging Stations</span></a></li>
+                <li><a href="demand.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>📈</span> <span class="nav-label">Demand Prediction</span></a></li>
+                <li><a href="dynamic_reroute.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🔄</span> <span class="nav-label">Dynamic Reroute</span></a></li>
+                <li><a href="graph.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🌐</span> <span class="nav-label">Neo4j Graph</span></a></li>
+                
+                <div style="padding: 1.25rem 1.25rem 0.5rem 1.25rem; font-size: 0.7rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.8px;">User Suite</div>
+                <li><a href="ev_profile.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🚗</span> <span class="nav-label">EV Profiles</span></a></li>
+                <li><a href="trip_history.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🕒</span> <span class="nav-label">Trip History</span></a></li>
+                <li><a href="favorites.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>⭐</span> <span class="nav-label">Favorites</span></a></li>
+                <li><a href="notifications.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🔔</span> <span class="nav-label">Notifications</span></a></li>
+                <li><a href="calculator.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🧮</span> <span class="nav-label">Cost Calculator</span></a></li>
+            </ul>
+        </div>
+
+        <div style="padding: 1rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+            <a href="login.html" style="display: flex; align-items: center; gap: 0.75rem; color: #ef4444; font-weight: 600; font-size: 0.9rem; text-decoration: none;">
+                <span>🚪</span> <span class="nav-label">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="main-content">
+        <header class="topbar" style="position: fixed; top: 0; right: 0; left: var(--sidebar-width); height: var(--topbar-height); background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem;">
+            <div><span class="badge badge-primary">🔋 Real-Time Battery Discharge Tracking</span></div>
+            <div style="display: flex; align-items: center; gap: 1.25rem;">
+                <div class="badge badge-primary" style="padding: 0.4rem 0.85rem; border-radius: 9999px;">
+                    <span>Tesla Model 3: <strong>68%</strong></span>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-container">
+            <div class="dashboard-header">
+                <div>
+                    <h1 style="font-size: 1.85rem;">Battery-Aware Journey Analysis</h1>
+                    <p style="color: var(--text-muted);">Real-time State of Charge (SOC) tracking and safety margin evaluation</p>
+                </div>
+            </div>
+
+            <!-- Visual Battery Journey Flow Stepper -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.2rem; margin-bottom: 1.5rem;">Journey Battery Discharge Flow</h3>
+
+                <div class="journey-stepper">
+                    <div style="text-align: center;">
+                        <div class="journey-step" style="border-color: var(--primary);">68%</div>
+                        <div class="journey-step-info"><strong>Origin</strong><div style="font-size: 0.8rem; color: var(--text-muted);">Coimbatore Central</div></div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div class="journey-step" style="border-color: #f59e0b;">42%</div>
+                        <div class="journey-step-info"><strong>Arrival at Hub</strong><div style="font-size: 0.8rem; color: var(--text-muted);">-26% Consumption</div></div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div class="journey-step" style="background: var(--primary-light); border-color: var(--primary);">⚡ 85%</div>
+                        <div class="journey-step-info"><strong>Charging Stop</strong><div style="font-size: 0.8rem; color: var(--primary-hover);">AeroCity Hub (+59%)</div></div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div class="journey-step" style="border-color: #3b82f6;">58%</div>
+                        <div class="journey-step-info"><strong>Destination</strong><div style="font-size: 0.8rem; color: var(--text-muted);">Salem Steel Plaza</div></div>
+                    </div>
+                </div>
+
+                <!-- Detailed Battery Metrics -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; background: var(--bg-main); padding: 1.25rem; border-radius: var(--radius-md);">
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Total Trip Distance</span>
+                        <strong style="font-size: 1.2rem;">148 km</strong>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Estimated Consumption</span>
+                        <strong style="font-size: 1.2rem; color: var(--navy-dark);">23.6 kWh</strong>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Remaining Battery Reserve</span>
+                        <strong style="font-size: 1.2rem; color: var(--primary-hover);">58% SOC</strong>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Required Charging Amount</span>
+                        <strong style="font-size: 1.2rem;">44.2 kWh (18 mins)</strong>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Safety Margin Guarantee</span>
+                        <span class="badge badge-available">92% Optimal Reserve</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suggested Charging Stations -->
+            <div>
+                <h3 style="font-size: 1.2rem; margin-bottom: 1rem;">Suggested En-Route Charging Hubs</h3>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                            <h4 style="font-size: 1.1rem; margin: 0;">AeroCity HyperCharge Superhub</h4>
+                            <span class="badge badge-available">🟢 Available</span>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">📍 Avinashi Road Sector 2 • 3.2 km away</p>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; background: var(--bg-main); padding: 0.75rem; border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                            <span>Speed: <strong>240 kW</strong></span>
+                            <span>Price: <strong>₹18.5/kWh</strong></span>
+                        </div>
+                        <a href="station_detail.html" class="btn btn-primary btn-sm" style="width: 100%;">Add Stop to Journey</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer style="margin-top: auto; padding: 1.5rem 2rem; background: var(--bg-card); border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div><strong>Smart EV Charging Network</strong> &copy; 2026</div>
+            <div style="display: flex; align-items: center; gap: 1.5rem;"><span class="badge badge-primary">Neo4j AuraDB Connected</span></div>
+        </footer>
+    </div>
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

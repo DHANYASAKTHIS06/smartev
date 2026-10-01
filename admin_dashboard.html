@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Smart EV Platform</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar" style="background:#0a0f1d; border-bottom:1px solid #1f2937;">
+        <div class="container nav-container">
+            <a href="admin_dashboard.html" class="logo text-white">
+                <i class="fa-solid fa-bolt-lightning text-primary"></i> Smart<span>EV</span> <span class="badge badge-primary text-xs ml-2">ADMIN</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="admin_dashboard.html" class="nav-link active"><i class="fa-solid fa-gauge"></i> Overview</a></li>
+                <li><a href="admin_users.html" class="nav-link"><i class="fa-solid fa-users"></i> Users</a></li>
+                <li><a href="admin_evs.html" class="nav-link"><i class="fa-solid fa-car"></i> EVs</a></li>
+                <li><a href="admin_stations.html" class="nav-link"><i class="fa-solid fa-charging-station"></i> Stations</a></li>
+                <li><a href="admin_chargers.html" class="nav-link"><i class="fa-solid fa-plug-circle-bolt"></i> Chargers</a></li>
+                <li><a href="admin_road_network.html" class="nav-link"><i class="fa-solid fa-road"></i> Roads</a></li>
+                <li><a href="admin_demand.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Demand</a></li>
+                <li><a href="admin_reports.html" class="nav-link"><i class="fa-solid fa-file-contract"></i> Reports</a></li>
+            </ul>
+            <div class="nav-auth">
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> User App</a>
+                <a href="index.html" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-power-off"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header bg-dark-navy text-white py-4">
+        <div class="container d-flex justify-between align-center">
+            <div>
+                <h1 class="h2 mb-1"><i class="fa-solid fa-sliders text-primary"></i> System Administration Dashboard</h1>
+                <p class="text-muted-light mb-0">Neo4j AuraDB Graph Network Management & Predictive Demand Grid Analytics</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="admin_reports.html" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Export Report</a>
+                <a href="admin_road_network.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-diagram-project"></i> Topology Map</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <!-- 7 Key Metric Cards -->
+        <div class="grid grid-4 gap-3 mb-4">
+            <div class="card p-3 shadow-sm">
+                <span class="text-xs text-muted font-weight-bold uppercase">Total Users</span>
+                <div class="h3 font-weight-bold text-dark my-1">1,420</div>
+                <div class="text-xs text-success"><i class="fa-solid fa-arrow-trend-up"></i> +48 this week</div>
+            </div>
+            <div class="card p-3 shadow-sm">
+                <span class="text-xs text-muted font-weight-bold uppercase">Registered EVs</span>
+                <div class="h3 font-weight-bold text-dark my-1">1,890</div>
+                <div class="text-xs text-muted">Tesla / Tata / MG</div>
+            </div>
+            <div class="card p-3 shadow-sm">
+                <span class="text-xs text-muted font-weight-bold uppercase">Charging Stations</span>
+                <div class="h3 font-weight-bold text-dark my-1">250</div>
+                <div class="text-xs text-success"><i class="fa-solid fa-circle-check"></i> 98% Operational</div>
+            </div>
+            <div class="card p-3 shadow-sm">
+                <span class="text-xs text-muted font-weight-bold uppercase">Charging Points</span>
+                <div class="h3 font-weight-bold text-dark my-1">850</div>
+                <div class="text-xs text-primary font-weight-bold">640 Available Now</div>
+            </div>
+        </div>
+
+        <div class="grid grid-3 gap-3 mb-4">
+            <div class="card p-3 shadow-sm">
+                <span class="text-xs text-muted font-weight-bold uppercase">Active Trips En-Route</span>
+                <div class="h3 font-weight-bold text-dark my-1">142</div>
+                <div class="text-xs text-info">Live Neo4j Tracked</div>
+            </div>
+            <div class="card p-3 shadow-sm">
+                <span class="text-xs text-muted font-weight-bold uppercase">Today's Sessions</span>
+                <div class="h3 font-weight-bold text-dark my-1">620</div>
+                <div class="text-xs text-muted">Avg 22 mins / session</div>
+            </div>
+            <div class="card p-3 shadow-sm border-left-success">
+                <span class="text-xs text-muted font-weight-bold uppercase">Daily Energy Throughput</span>
+                <div class="h3 font-weight-bold text-success my-1">18.4 MWh</div>
+                <div class="text-xs text-success"><i class="fa-solid fa-bolt"></i> Peak Load Balanced</div>
+            </div>
+        </div>
+
+        <!-- Charts & Peak Section -->
+        <div class="grid grid-2 gap-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-between align-center">
+                    <h3 class="h6 mb-0 text-dark font-weight-bold"><i class="fa-solid fa-chart-area text-primary"></i> Daily Charging Demand & Grid Utilization</h3>
+                    <span class="badge badge-primary">LIVE AURA FEED</span>
+                </div>
+                <div class="card-body">
+                    <canvas id="adminDemandCanvas" style="height: 240px; width: 100%;"></canvas>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h3 class="h6 mb-0 text-dark font-weight-bold"><i class="fa-solid fa-clock text-warning"></i> Peak Load & Capacity Utilization</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-between text-sm mb-1 font-weight-bold">
+                            <span>Morning Peak (08:00 - 10:30 IST)</span>
+                            <span class="text-warning">68% Capacity</span>
+                        </div>
+                        <div class="progress-bar-bg" style="height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;">
+                            <div style="width:68%; height:100%; background:#f59e0b;"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-between text-sm mb-1 font-weight-bold">
+                            <span>Evening Peak (17:30 - 21:00 IST)</span>
+                            <span class="text-danger">89% Capacity (Congestion Risk)</span>
+                        </div>
+                        <div class="progress-bar-bg" style="height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;">
+                            <div style="width:89%; height:100%; background:#ef4444;"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-between text-sm mb-1 font-weight-bold">
+                            <span>Off-Peak Night Charging (22:00 - 06:00 IST)</span>
+                            <span class="text-success">31% Capacity (Optimal)</span>
+                        </div>
+                        <div class="progress-bar-bg" style="height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;">
+                            <div style="width:31%; height:100%; background:#00d176;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Network Events Table -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-between align-center">
+                <h3 class="h6 mb-0 text-dark font-weight-bold"><i class="fa-solid fa-bolt text-primary"></i> Live Charging Sessions & Network Events</h3>
+                <span class="text-xs text-muted">Auto-refreshed every 10s</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Session ID</th>
+                            <th>User / Vehicle</th>
+                            <th>Station Hub</th>
+                            <th>Charger Type</th>
+                            <th>Energy Added</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>#SES-9481</code></td>
+                            <td>Alex Rivera (Tesla Model 3)</td>
+                            <td>Coimbatore Fast Hub</td>
+                            <td>120kW CCS2</td>
+                            <td><strong>34.2 kWh</strong></td>
+                            <td><span class="badge badge-success">ACTIVE (82%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>#SES-9480</code></td>
+                            <td>Kavitha R (Tata Nexon EV)</td>
+                            <td>Tiruppur Textile Express</td>
+                            <td>60kW CCS2</td>
+                            <td><strong>21.0 kWh</strong></td>
+                            <td><span class="badge badge-success">ACTIVE (64%)</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>#SES-9479</code></td>
+                            <td>Manoj Kumar (MG ZS EV)</td>
+                            <td>Salem NH-44 Hub</td>
+                            <td>50kW CCS2</td>
+                            <td><strong>44.8 kWh</strong></td>
+                            <td><span class="badge badge-secondary">COMPLETED</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-white py-4 mt-5">
+        <div class="container text-center text-sm text-muted">
+            <p class="mb-0">© 2026 Smart EV Route & Demand Platform. Core PHP 8+ & Neo4j AuraDB Cloud Admin Console.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/demand_chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof DemandChartManager !== 'undefined') {
+                new DemandChartManager('adminDemandCanvas');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create EV Account - Smart EV Platform</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background: #ffffff;">
+    <div style="min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;" class="auth-split-layout">
+        <!-- Left Brand Section -->
+        <div style="background: linear-gradient(135deg, #0a0f1d 0%, #1e293b 100%); color: #ffffff; padding: 4rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <a href="index.html" class="logo text-white" style="text-decoration:none; font-size:1.5rem; font-weight:800;">
+                    <i class="fa-solid fa-bolt-lightning text-primary"></i> Smart<span style="color:#00d176;">EV</span>
+                </a>
+            </div>
+
+            <div style="margin: auto 0;">
+                <div style="font-size: 3.5rem; margin-bottom: 1.5rem;">🌱⚡🗺️</div>
+                <h1 style="font-size: 2.5rem; color: #ffffff; margin-bottom: 1.25rem; line-height: 1.2;">
+                    Join the Intelligent EV Highway Network
+                </h1>
+                <p style="font-size: 1.1rem; color: #94a3b8; line-height: 1.7; max-width: 480px;">
+                    Register your vehicle to unlock real-time graph battery discharge models, dynamic grid bypasses, and peak tariff savings across South India.
+                </p>
+            </div>
+
+            <div style="font-size: 0.85rem; color: #64748b;">
+                © 2026 Smart EV Route Platform. Core PHP 8+ & Neo4j AuraDB Cloud.
+            </div>
+        </div>
+
+        <!-- Right Register Form Section -->
+        <div style="display: flex; align-items: center; justify-content: center; padding: 3rem;">
+            <div style="width: 100%; max-width: 440px;">
+                <div style="margin-bottom: 2rem;">
+                    <h2 style="font-size: 2rem; color: #0a0f1d; margin-bottom: 0.5rem;">Create Account ⚡</h2>
+                    <p class="text-muted">Register to start calculating Neo4j-optimized charging trips</p>
+                </div>
+
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group mb-3">
+                        <label class="form-label font-weight-bold">Full Name</label>
+                        <input type="text" id="regName" class="form-control" placeholder="Dhanya Sakthi" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label font-weight-bold">Email Address</label>
+                        <input type="email" id="regEmail" class="form-control" placeholder="dhanya.sakthi@gmail.com" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label font-weight-bold">Primary EV Model</label>
+                        <select id="regEv" class="form-control">
+                            <option value="Tata Nexon EV Max">Tata Nexon EV Max (40.5 kWh, CCS2)</option>
+                            <option value="MG ZS EV">MG ZS EV Long Range (50.3 kWh, CCS2)</option>
+                            <option value="Hyundai Ioniq 5">Hyundai Ioniq 5 (72.6 kWh, 350kW CCS2)</option>
+                            <option value="Mahindra XUV400">Mahindra XUV400 (39.4 kWh, CCS2)</option>
+                            <option value="BYD Atto 3">BYD Atto 3 (60.48 kWh, CCS2)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label font-weight-bold">Password</label>
+                        <input type="password" id="regPass" class="form-control" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="d-flex align-center gap-2 mb-4 text-sm text-muted">
+                        <input type="checkbox" required checked style="accent-color: #00d176;">
+                        <span>I agree to the Terms of Service & Privacy Policy</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-lg mb-3">
+                        <i class="fa-solid fa-user-plus mr-2"></i> Create Free Account
+                    </button>
+
+                    <div class="text-center text-sm text-muted">
+                        Already have an account? <a href="login.html" class="text-dark font-weight-bold">Sign In</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    @media (max-width: 850px) {
+        .auth-split-layout { grid-template-columns: 1fr !important; }
+        .auth-split-layout > div:first-child { display: none !important; }
+    }
+    </style>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            localStorage.setItem('smartev_user', JSON.stringify({ email: email, name: name, role: 'USER' }));
+            showToast('Account created and registered into Neo4j graph!', 'success');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 900);
+        }
+    </script>
+</body>
+</html>

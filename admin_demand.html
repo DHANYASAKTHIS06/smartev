@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Predictive Demand Control - Smart EV</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar" style="background:#0a0f1d; border-bottom:1px solid #1f2937;">
+        <div class="container nav-container">
+            <a href="admin_dashboard.html" class="logo text-white">
+                <i class="fa-solid fa-bolt-lightning text-primary"></i> Smart<span>EV</span> <span class="badge badge-primary text-xs ml-2">ADMIN</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="admin_dashboard.html" class="nav-link"><i class="fa-solid fa-gauge"></i> Overview</a></li>
+                <li><a href="admin_users.html" class="nav-link"><i class="fa-solid fa-users"></i> Users</a></li>
+                <li><a href="admin_evs.html" class="nav-link"><i class="fa-solid fa-car"></i> EVs</a></li>
+                <li><a href="admin_stations.html" class="nav-link"><i class="fa-solid fa-charging-station"></i> Stations</a></li>
+                <li><a href="admin_chargers.html" class="nav-link"><i class="fa-solid fa-plug-circle-bolt"></i> Chargers</a></li>
+                <li><a href="admin_road_network.html" class="nav-link"><i class="fa-solid fa-road"></i> Roads</a></li>
+                <li><a href="admin_demand.html" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Demand</a></li>
+                <li><a href="admin_reports.html" class="nav-link"><i class="fa-solid fa-file-contract"></i> Reports</a></li>
+            </ul>
+            <div class="nav-auth">
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> User App</a>
+                <a href="index.html" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-power-off"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header bg-dark-navy text-white py-4">
+        <div class="container d-flex justify-between align-center">
+            <div>
+                <h1 class="h2 mb-1"><i class="fa-solid fa-brain text-primary"></i> Predictive Demand & Peak Load Balancing</h1>
+                <p class="text-muted-light mb-0">Monitor 200+ historical <code>:DemandRecord</code> nodes, predict grid stress, and tune dynamic tariffs</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="showToast('AI Demand Engine re-calibrated', 'success')"><i class="fa-solid fa-arrows-rotate mr-1"></i> Run Neural Demand Predictor</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white d-flex justify-between align-center">
+                <h3 class="h6 mb-0 text-dark font-weight-bold"><i class="fa-solid fa-chart-area text-primary"></i> Multi-Station Demand Load Forecasting</h3>
+                <div class="d-flex gap-2">
+                    <span class="badge badge-primary">Coimbatore Hub</span>
+                    <span class="badge badge-secondary">Salem NH-44</span>
+                    <span class="badge badge-secondary">Tiruppur Hub</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="adminDemandForecastCanvas" style="height: 280px; width:100%;"></canvas>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h3 class="h6 mb-0 text-dark font-weight-bold"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Latest Neo4j Demand Records</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Record ID</th>
+                            <th>Station Hub</th>
+                            <th>Day / Hour</th>
+                            <th>Active Sessions</th>
+                            <th>Energy Consumed</th>
+                            <th>Calculated Demand Level</th>
+                            <th>Est. Wait Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>DMD-9901</code></td>
+                            <td>Salem NH-44 Hub</td>
+                            <td>Friday 18:00 IST</td>
+                            <td>8 sessions</td>
+                            <td><strong>184.2 kWh</strong></td>
+                            <td><span class="badge badge-danger">HIGH (88%)</span></td>
+                            <td>35 mins</td>
+                        </tr>
+                        <tr>
+                            <td><code>DMD-9902</code></td>
+                            <td>Coimbatore Prozone Hub</td>
+                            <td>Friday 18:00 IST</td>
+                            <td>4 sessions</td>
+                            <td><strong>92.0 kWh</strong></td>
+                            <td><span class="badge badge-warning">MEDIUM (55%)</span></td>
+                            <td>10 mins</td>
+                        </tr>
+                        <tr>
+                            <td><code>DMD-9903</code></td>
+                            <td>Erode Green Hub</td>
+                            <td>Friday 18:00 IST</td>
+                            <td>2 sessions</td>
+                            <td><strong>44.5 kWh</strong></td>
+                            <td><span class="badge badge-success">LOW (28%)</span></td>
+                            <td>0 mins</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer bg-dark text-white py-4 mt-5">
+        <div class="container text-center text-sm text-muted">
+            <p class="mb-0">© 2026 Smart EV Route & Demand Platform. Core PHP 8+ & Neo4j AuraDB Cloud Admin Console.</p>
+        </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/demand_chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof DemandChartManager !== 'undefined') {
+                new DemandChartManager('adminDemandForecastCanvas');
+            }
+        });
+    </script>
+</body>
+</html>

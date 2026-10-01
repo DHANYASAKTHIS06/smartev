@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Sign In - Smart EV Platform</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background: #ffffff;">
+    <div style="min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;" class="auth-split-layout">
+        <!-- Left Brand Section -->
+        <div style="background: linear-gradient(135deg, #0a0f1d 0%, #1e293b 100%); color: #ffffff; padding: 4rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <a href="index.html" class="logo text-white" style="text-decoration:none; font-size:1.5rem; font-weight:800;">
+                    <i class="fa-solid fa-bolt-lightning text-primary"></i> Smart<span style="color:#00d176;">EV</span>
+                </a>
+            </div>
+
+            <div style="margin: auto 0;">
+                <div style="font-size: 3.5rem; margin-bottom: 1.5rem;">🔋⚡🚗</div>
+                <h1 style="font-size: 2.5rem; color: #ffffff; margin-bottom: 1.25rem; line-height: 1.2;">
+                    Intelligent Route Optimization & Predictive EV Management
+                </h1>
+                <p style="font-size: 1.1rem; color: #94a3b8; line-height: 1.7; max-width: 480px;">
+                    Powered by Neo4j AuraDB graph traversals for sub-second Dijkstra shortest paths and battery SoC safety margins.
+                </p>
+            </div>
+
+            <div style="font-size: 0.85rem; color: #64748b;">
+                © 2026 Smart EV Route Platform. Core PHP 8+ & Neo4j AuraDB Cloud.
+            </div>
+        </div>
+
+        <!-- Right Login Form Section -->
+        <div style="display: flex; align-items: center; justify-content: center; padding: 3rem;">
+            <div style="width: 100%; max-width: 420px;">
+                <div style="margin-bottom: 2rem;">
+                    <h2 style="font-size: 2rem; color: #0a0f1d; margin-bottom: 0.5rem;">Welcome back! 👋</h2>
+                    <p class="text-muted">Sign in to access your intelligent EV journey dashboard</p>
+                </div>
+
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group mb-3">
+                        <label class="form-label font-weight-bold">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="dhanyasakthi06@gmail.com" value="dhanya.sakthi@gmail.com" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <div class="d-flex justify-between align-center mb-1">
+                            <label class="form-label font-weight-bold mb-0">Password</label>
+                            <a href="#" class="text-xs text-primary">Forgot Password?</a>
+                        </div>
+                        <input type="password" id="password" class="form-control" value="password123" required>
+                    </div>
+
+                    <div class="d-flex justify-between align-center mb-4 text-sm">
+                        <label class="d-flex align-center gap-2 cursor-pointer text-muted">
+                            <input type="checkbox" checked style="accent-color: #00d176;"> Remember me on this device
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-lg mb-3">
+                        <i class="fa-solid fa-right-to-bracket mr-2"></i> Sign In to Account
+                    </button>
+
+                    <div class="text-center text-sm text-muted">
+                        Don't have an EV account? <a href="register.html" class="text-dark font-weight-bold">Register now</a>
+                    </div>
+
+                    <div class="text-center mt-3 pt-3 border-top text-xs text-muted">
+                        Looking for Admin Portal? <a href="admin_login.html" class="text-primary font-weight-bold">Admin Sign In</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    @media (max-width: 850px) {
+        .auth-split-layout { grid-template-columns: 1fr !important; }
+        .auth-split-layout > div:first-child { display: none !important; }
+    }
+    </style>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            localStorage.setItem('smartev_user', JSON.stringify({ email: email, name: 'Dhanya Sakthi', role: 'USER' }));
+            showToast('Signed in successfully! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 800);
+        }
+    </script>
+</body>
+</html>

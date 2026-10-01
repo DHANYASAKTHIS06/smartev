@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Garage & Vehicle Profiles - Smart EV</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-bolt-lightning text-primary"></i> Smart<span>EV</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="route_planner.html" class="nav-link"><i class="fa-solid fa-route"></i> Route Planner</a></li>
+                <li><a href="stations.html" class="nav-link"><i class="fa-solid fa-charging-station"></i> Stations</a></li>
+                <li><a href="demand.html" class="nav-link"><i class="fa-solid fa-brain"></i> Demand AI</a></li>
+                <li><a href="ev_profile.html" class="nav-link active"><i class="fa-solid fa-car-battery"></i> EV Garage</a></li>
+            </ul>
+            <div class="nav-auth">
+                <div class="user-pill">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="avatar-sm">
+                    <span class="user-name">Dhanya Sakthi</span>
+                </div>
+                <a href="index.html" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-right-from-bracket"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header bg-dark-navy text-white py-4">
+        <div class="container d-flex justify-between align-center">
+            <div>
+                <h1 class="h2 mb-1"><i class="fa-solid fa-car-side text-primary"></i> EV Garage & Vehicle Profiles</h1>
+                <p class="text-muted-light mb-0">Manage your connected electric vehicles, battery health telemetry, and charging specs for Cypher route computations.</p>
+            </div>
+            <div>
+                <button class="btn btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add New Vehicle Profile</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <div class="grid grid-3 gap-4" id="evGrid">
+            <!-- EV 1 (Default) -->
+            <div class="card card-hover shadow-sm border-primary">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=600&auto=format&fit=crop&q=80" alt="Tata Nexon EV" style="height: 180px; width: 100%; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                    <span class="badge badge-success position-absolute top-2 right-2">ACTIVE VEHICLE</span>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-between align-center mb-2">
+                        <h3 class="h5 mb-0 text-dark">Tata Nexon EV Max</h3>
+                        <span class="badge badge-secondary">TN-38-BZ-4401</span>
+                    </div>
+                    <div class="grid grid-2 gap-2 my-3 text-sm">
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Battery Pack</span>
+                            <strong class="text-dark">40.5 kWh</strong>
+                        </div>
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Current SoC</span>
+                            <strong class="text-success">68% (27.5 kWh)</strong>
+                        </div>
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Max DC Charge</span>
+                            <strong class="text-dark">50 kW CCS2</strong>
+                        </div>
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Efficiency</span>
+                            <strong class="text-dark">0.14 kWh/km</strong>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-between align-center pt-2 border-top">
+                        <button class="btn btn-sm btn-outline-primary" onclick="editVehicle('Tata Nexon EV Max')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <span class="text-xs text-muted"><i class="fa-solid fa-circle-check text-success"></i> Neo4j Synced</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EV 2 -->
+            <div class="card card-hover shadow-sm">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=600&auto=format&fit=crop&q=80" alt="MG ZS EV" style="height: 180px; width: 100%; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-between align-center mb-2">
+                        <h3 class="h5 mb-0 text-dark">MG ZS EV Long Range</h3>
+                        <span class="badge badge-secondary">TN-37-AA-9902</span>
+                    </div>
+                    <div class="grid grid-2 gap-2 my-3 text-sm">
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Battery Pack</span>
+                            <strong class="text-dark">50.3 kWh</strong>
+                        </div>
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Current SoC</span>
+                            <strong class="text-warning">42% (21.1 kWh)</strong>
+                        </div>
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Max DC Charge</span>
+                            <strong class="text-dark">80 kW CCS2</strong>
+                        </div>
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Efficiency</span>
+                            <strong class="text-dark">0.16 kWh/km</strong>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-between align-center pt-2 border-top">
+                        <button class="btn btn-sm btn-outline-primary" onclick="editVehicle('MG ZS EV')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="setDefault('MG ZS EV Long Range')">Set Default</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EV 3 -->
+            <div class="card card-hover shadow-sm">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=600&auto=format&fit=crop&q=80" alt="Hyundai Ioniq 5" style="height: 180px; width: 100%; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-between align-center mb-2">
+                        <h3 class="h5 mb-0 text-dark">Hyundai Ioniq 5</h3>
+                        <span class="badge badge-secondary">TN-07-CK-1122</span>
+                    </div>
+                    <div class="grid grid-2 gap-2 my-3 text-sm">
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Battery Pack</span>
+                            <strong class="text-dark">72.6 kWh</strong>
+                        </div>
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Current SoC</span>
+                            <strong class="text-success">85% (61.7 kWh)</strong>
+                        </div>
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Max DC Charge</span>
+                            <strong class="text-dark">350 kW CCS2</strong>
+                        </div>
+                        <div class="p-2 bg-light rounded">
+                            <span class="text-muted d-block text-xs">Efficiency</span>
+                            <strong class="text-dark">0.17 kWh/km</strong>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-between align-center pt-2 border-top">
+                        <button class="btn btn-sm btn-outline-primary" onclick="editVehicle('Hyundai Ioniq 5')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="setDefault('Hyundai Ioniq 5')">Set Default</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add EV Modal -->
+    <div id="addModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;">
+        <div class="modal-dialog bg-white rounded p-4" style="max-width:500px; width:90%;">
+            <div class="d-flex justify-between align-center mb-3">
+                <h3 class="h5 mb-0 text-dark"><i class="fa-solid fa-car text-primary"></i> Register EV Profile</h3>
+                <button type="button" class="btn btn-sm btn-light" onclick="closeAddModal()">&times;</button>
+            </div>
+            <form onsubmit="handleSaveEV(event)">
+                <div class="form-group mb-2">
+                    <label class="form-label text-sm">Vehicle Model</label>
+                    <input type="text" class="form-control" placeholder="e.g. BYD Atto 3 / Mahindra XUV400" required>
+                </div>
+                <div class="form-group mb-2">
+                    <label class="form-label text-sm">Registration Number</label>
+                    <input type="text" class="form-control" placeholder="e.g. TN-38-CC-1234" required>
+                </div>
+                <div class="grid grid-2 gap-2 mb-2">
+                    <div class="form-group">
+                        <label class="form-label text-sm">Battery (kWh)</label>
+                        <input type="number" step="0.1" class="form-control" placeholder="60.4" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label text-sm">Current SoC (%)</label>
+                        <input type="number" min="1" max="100" class="form-control" placeholder="75" required>
+                    </div>
+                </div>
+                <div class="grid grid-2 gap-2 mb-3">
+                    <div class="form-group">
+                        <label class="form-label text-sm">Max DC Power (kW)</label>
+                        <input type="number" class="form-control" placeholder="80" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label text-sm">Connector Type</label>
+                        <select class="form-control">
+                            <option>CCS2</option>
+                            <option>Type 2 AC</option>
+                            <option>CHAdeMO</option>
+                            <option>GB/T</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex justify-end gap-2">
+                    <button type="button" class="btn btn-outline-secondary" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Vehicle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-white py-4 mt-5">
+        <div class="container text-center text-sm text-muted">
+            <p class="mb-0">© 2026 Smart EV Route & Demand Platform. Powered by Core PHP 8+ & Neo4j AuraDB Cloud.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        function openAddModal() {
+            document.getElementById('addModal').style.display = 'flex';
+        }
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
+        }
+        function handleSaveEV(e) {
+            e.preventDefault();
+            closeAddModal();
+            showToast('New vehicle registered and mapped into Neo4j graph!', 'success');
+        }
+        function setDefault(model) {
+            showToast(`${model} set as default vehicle for route optimizations`, 'success');
+        }
+        function editVehicle(model) {
+            showToast(`Editing parameters for ${model}`, 'info');
+        }
+    </script>
+</body>
+</html>
