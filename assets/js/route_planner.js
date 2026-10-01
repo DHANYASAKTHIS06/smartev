@@ -1,6 +1,7 @@
 /**
  * Dynamic Smart EV Route Planner & Battery Consumption Engine
  * Connects directly to Neo4j AuraDB & Render PHP API
+ * Automatically logs live trips into dynamic user history
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -79,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <pre style="margin: 0;">${r.cypher_query}</pre>
                 </div>
 
-                <button class="btn ${r.is_recommended ? 'btn-primary' : 'btn-outline'} btn-sm" style="width: 100%;">
-                    ${r.is_recommended ? '⚡ Start Navigation on this Route' : 'Select Route Option'}
+                <button onclick="event.stopPropagation(); recordDynamicTrip('${orig}', '${dest}', ${r.distance_km}, ${r.energy_consumed_kwh}, ${r.charging_cost}, '${r.station.name}')" class="btn ${r.is_recommended ? 'btn-primary' : 'btn-outline'} btn-sm" style="width: 100%;">
+                    ⚡ Start Navigation & Log Trip
                 </button>
             </div>
         `).join('');
@@ -95,6 +96,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selected) {
             selected.classList.add('route-card-recommended');
             showToast('Selected route updated for dynamic battery simulation!', 'info');
+        }
+    };
+
+    // Log trip dynamically and update metrics
+    window.recordDynamicTrip = function(origin, destination, distance, energy, cost, station) {
+        if (window.SmartEVData) {
+            window.SmartEVData.addTrip({
+                origin: origin,
+                destination: destination,
+                distance: distance,
+                energy: energy,
+                cost: cost,
+                station: station
+            });
+            showToast(`Trip ${origin} → ${destination} (${distance} km) logged! Dashboard metrics updated.`, 'success');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
         }
     };
 });

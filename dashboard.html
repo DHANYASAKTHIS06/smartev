@@ -92,11 +92,16 @@
             <div class="dashboard-header">
                 <div class="user-welcome">
                     <h1 id="welcomeGreeting">Good day, Dhanya Sakthi 👋</h1>
-                    <p>Your Neo4j EV network status is optimal. All 250+ charging hubs active across South India.</p>
+                    <p>Your Neo4j EV network status is optimal. Plan a new journey to start recording live telemetry.</p>
                 </div>
-                <a href="route_planner.html" class="btn btn-primary">
-                    ⚡ New Route Search
-                </a>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button onclick="window.SmartEVData.clearAllDataToZero()" class="btn btn-outline btn-sm" title="Reset all accumulated journey data to 0">
+                        🔄 Reset All to 0
+                    </button>
+                    <a href="route_planner.html" class="btn btn-primary">
+                        ⚡ Plan New Route
+                    </a>
+                </div>
             </div>
 
             <!-- Dynamic Battery Card -->
@@ -156,7 +161,6 @@
                     </div>
                 </a>
                 <a href="calculator.html" class="action-card">
-                    <div class="action-icon">💰</div>
                     <div class="action-info">
                         <h4>Charging Cost</h4>
                         <p>Energy & tariff estimator</p>
@@ -170,40 +174,40 @@
                 </a>
             </div>
 
-            <!-- Stats Grid -->
-            <h3 style="font-size: 1.15rem; margin-bottom: 1rem;">Dashboard Analytics</h3>
+            <!-- Dynamic Analytics Stats (Starts from 0) -->
+            <h3 style="font-size: 1.15rem; margin-bottom: 1rem;">Live User Journey Analytics</h3>
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-header">
                         <span class="stat-title">Total Trips</span>
                         <span>🛣️</span>
                     </div>
-                    <div class="stat-value" id="statTotalTrips">34</div>
-                    <div class="stat-trend">↑ 8 this month</div>
+                    <div class="stat-value" id="statTotalTrips">0</div>
+                    <div class="stat-trend" id="statTripTrend">0 trips recorded</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
                         <span class="stat-title">Total Distance</span>
                         <span>📍</span>
                     </div>
-                    <div class="stat-value" id="statTotalDistance">4,120 km</div>
-                    <div class="stat-trend">↑ 520 km week</div>
+                    <div class="stat-value" id="statTotalDistance">0 km</div>
+                    <div class="stat-trend">Live accumulated</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
                         <span class="stat-title">Energy Consumed</span>
                         <span>⚡</span>
                     </div>
-                    <div class="stat-value" id="statTotalEnergy">576.8 kWh</div>
-                    <div class="stat-trend">0.140 kWh/km avg</div>
+                    <div class="stat-value" id="statTotalEnergy">0.0 kWh</div>
+                    <div class="stat-trend">0.14 kWh/km rate</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
                         <span class="stat-title">Total Charging Cost</span>
                         <span>💳</span>
                     </div>
-                    <div class="stat-value" id="statTotalCost">₹9,840</div>
-                    <div class="stat-trend">Saved ₹14,200 vs petrol</div>
+                    <div class="stat-value" id="statTotalCost">₹0.00</div>
+                    <div class="stat-trend">Dynamic tariff billing</div>
                 </div>
             </div>
 
@@ -266,23 +270,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Dynamic User Profile Synchronization
-    const storedUser = localStorage.getItem('smartev_user');
-    let user = {
-        name: 'Dhanya Sakthi',
-        email: 'dhanya.sakthi@gmail.com',
-        evModel: 'Tata Nexon EV Max',
-        capacity: 40.5,
-        soc: 68,
-        efficiency: 0.14
-    };
-
-    if (storedUser) {
-        try {
-            const parsed = JSON.parse(storedUser);
-            if (parsed.name) user.name = parsed.name;
-            if (parsed.evModel) user.evModel = parsed.evModel;
-        } catch(e) {}
-    }
+    const user = window.SmartEVData.getUser();
 
     // Update Greeting & Profile in DOM
     const hour = new Date().getHours();
@@ -306,7 +294,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         ring.style.strokeDashoffset = offset;
     }
 
-    // 2. Fetch Live Dynamic Nearest Station from API
+    // 2. Dynamic Metric Synchronization (Starts at 0, accumulates with planned routes)
+    window.SmartEVData.updateDashboardMetrics();
+
+    // 3. Fetch Live Dynamic Nearest Station from API
     try {
         const res = await fetch('/api/stations.php?city=Coimbatore');
         const data = await res.json();

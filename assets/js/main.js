@@ -1,12 +1,93 @@
 /**
  * Main App Script - Smart EV Route & Demand Platform
- * Backend: https://smartev-1.onrender.com (Render PHP + Neo4j AuraDB)
+ * 100% Dynamic Engine (Starts from 0, tracks live user actions)
  */
 
 window.SMARTEV_CONFIG = {
     API_BASE: 'https://smartev-1.onrender.com/api',
     BACKEND_URL: 'https://smartev-1.onrender.com',
     NEO4J_URI: 'neo4j+s://355200dd.databases.neo4j.io'
+};
+
+// Dynamic Data Store Manager
+window.SmartEVData = {
+    getUser: function() {
+        const stored = localStorage.getItem('smartev_user');
+        if (stored) {
+            try { return JSON.parse(stored); } catch(e) {}
+        }
+        return {
+            name: 'Dhanya Sakthi',
+            email: 'dhanya.sakthi@gmail.com',
+            role: 'USER',
+            evModel: 'Tata Nexon EV Max',
+            capacity: 40.5,
+            soc: 68,
+            efficiency: 0.14
+        };
+    },
+
+    getTrips: function() {
+        const trips = localStorage.getItem('smartev_trips');
+        return trips ? JSON.parse(trips) : [];
+    },
+
+    addTrip: function(trip) {
+        const trips = this.getTrips();
+        trips.unshift({
+            id: 'TRIP-' + (Date.now().toString().slice(-4)),
+            date: new Date().toISOString().split('T')[0],
+            origin: trip.origin || 'Coimbatore',
+            destination: trip.destination || 'Salem',
+            distance: parseFloat(trip.distance || 0),
+            energy: parseFloat(trip.energy || 0),
+            cost: parseFloat(trip.cost || 0),
+            station: trip.station || 'Erode Green Fast Hub',
+            stops: trip.stops || 1,
+            status: 'COMPLETED'
+        });
+        localStorage.setItem('smartev_trips', JSON.stringify(trips));
+        this.updateDashboardMetrics();
+    },
+
+    clearAllDataToZero: function() {
+        localStorage.removeItem('smartev_trips');
+        window.showToast('All journey statistics reset to 0!', 'info');
+        setTimeout(() => window.location.reload(), 600);
+    },
+
+    getMetrics: function() {
+        const trips = this.getTrips();
+        let totalDistance = 0;
+        let totalEnergy = 0;
+        let totalCost = 0;
+
+        trips.forEach(t => {
+            totalDistance += parseFloat(t.distance || 0);
+            totalEnergy += parseFloat(t.energy || 0);
+            totalCost += parseFloat(t.cost || 0);
+        });
+
+        return {
+            totalTrips: trips.length,
+            totalDistance: totalDistance.toFixed(1),
+            totalEnergy: totalEnergy.toFixed(1),
+            totalCost: totalCost.toFixed(2)
+        };
+    },
+
+    updateDashboardMetrics: function() {
+        const metrics = this.getMetrics();
+        const tripEl = document.getElementById('statTotalTrips');
+        const distEl = document.getElementById('statTotalDistance');
+        const energyEl = document.getElementById('statTotalEnergy');
+        const costEl = document.getElementById('statTotalCost');
+
+        if (tripEl) tripEl.innerText = metrics.totalTrips;
+        if (distEl) distEl.innerText = `${metrics.totalDistance} km`;
+        if (energyEl) energyEl.innerText = `${metrics.totalEnergy} kWh`;
+        if (costEl) costEl.innerText = `₹${metrics.totalCost}`;
+    }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -98,4 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => toast.remove(), 300);
         }, 3500);
     };
+
+    // Initialize metrics on page load
+    window.SmartEVData.updateDashboardMetrics();
 });
