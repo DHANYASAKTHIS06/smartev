@@ -12,10 +12,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
     <link rel="stylesheet" href="assets/css/graph.css">
-
-    <script>
-        window.BACKEND_API_URL = "https://smartev-1.onrender.com";
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
@@ -46,7 +43,7 @@
                 <li><a href="graph.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🌐</span> <span class="nav-label">Neo4j Graph</span></a></li>
                 
                 <div style="padding: 1.25rem 1.25rem 0.5rem 1.25rem; font-size: 0.7rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.8px;">User Suite</div>
-                <li><a href="ev_profile.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🚗</span> <span class="nav-label">EV Profiles</span></a></li>
+                <li><a href="ev_profile.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🚗</span> <span class="nav-label">EV Garage</span></a></li>
                 <li><a href="trip_history.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🕒</span> <span class="nav-label">Trip History</span></a></li>
                 <li><a href="favorites.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>⭐</span> <span class="nav-label">Favorites</span></a></li>
                 <li><a href="notifications.html" class="sidebar-link" style="display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.5rem; color: var(--text-light); font-weight: 500; font-size: 0.925rem;"><span>🔔</span> <span class="nav-label">Notifications</span></a></li>
@@ -55,7 +52,7 @@
         </div>
 
         <div style="padding: 1rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-            <a href="login.html" style="display: flex; align-items: center; gap: 0.75rem; color: #ef4444; font-weight: 600; font-size: 0.9rem; text-decoration: none;">
+            <a href="login.html" onclick="localStorage.removeItem('smartev_user')" style="display: flex; align-items: center; gap: 0.75rem; color: #ef4444; font-weight: 600; font-size: 0.9rem; text-decoration: none;">
                 <span>🚪</span> <span class="nav-label">Logout</span>
             </a>
         </div>
@@ -75,7 +72,7 @@
             <div style="display: flex; align-items: center; gap: 1.25rem;">
                 <div class="badge badge-primary" style="padding: 0.4rem 0.85rem; display: flex; align-items: center; gap: 0.5rem; border-radius: 9999px; font-weight: 600;">
                     <span style="color: var(--primary-hover);">🔋</span>
-                    <span>Tesla Model 3: <strong>68%</strong> (~214 km)</span>
+                    <span id="topbarEvBadge">Tata Nexon EV: <strong>68%</strong> (~195 km)</span>
                 </div>
                 <a href="notifications.html" style="position: relative; background: var(--bg-main); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); color: var(--text-main); text-decoration: none;">
                     <span style="font-size: 1.1rem;">🔔</span>
@@ -84,8 +81,8 @@
                 <div style="display: flex; align-items: center; gap: 0.75rem; border-left: 1px solid var(--border-color); padding-left: 1.25rem;">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
                     <div>
-                        <span style="display: block; font-weight: 700; font-size: 0.9rem; color: var(--text-main); line-height: 1.2;">Alex Rivera</span>
-                        <span style="font-size: 0.75rem; color: var(--text-muted);">EV Driver</span>
+                        <span id="topbarUserName" style="display: block; font-weight: 700; font-size: 0.9rem; color: var(--text-main); line-height: 1.2;">Dhanya Sakthi</span>
+                        <span id="topbarUserRole" style="font-size: 0.75rem; color: var(--text-muted);">EV Driver & Admin</span>
                     </div>
                 </div>
             </div>
@@ -94,48 +91,48 @@
         <main class="content-container">
             <div class="dashboard-header">
                 <div class="user-welcome">
-                    <h1>Good morning, Alex Rivera 👋</h1>
-                    <p>Your Neo4j EV network status is optimal. All 250+ charging hubs active.</p>
+                    <h1 id="welcomeGreeting">Good day, Dhanya Sakthi 👋</h1>
+                    <p>Your Neo4j EV network status is optimal. All 250+ charging hubs active across South India.</p>
                 </div>
                 <a href="route_planner.html" class="btn btn-primary">
                     ⚡ New Route Search
                 </a>
             </div>
 
-            <!-- Battery Card -->
+            <!-- Dynamic Battery Card -->
             <div class="battery-card" style="margin-bottom: 2rem;">
                 <div class="battery-ring-container">
                     <svg class="battery-ring-svg" viewBox="0 0 120 120">
                         <circle class="battery-ring-bg" cx="60" cy="60" r="54"></circle>
-                        <circle class="battery-ring-fill" cx="60" cy="60" r="54"></circle>
+                        <circle class="battery-ring-fill" id="dashBatteryRing" cx="60" cy="60" r="54" stroke-dashoffset="108"></circle>
                     </svg>
                     <div class="battery-center-text">
-                        <div class="battery-pct">68%</div>
+                        <div class="battery-pct" id="dashBatteryPct">68%</div>
                         <div class="battery-sub">SOC</div>
                     </div>
                 </div>
 
                 <div style="flex: 1;">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
-                        <h2 style="font-size: 1.4rem; color: #ffffff; margin: 0;">Tesla Model 3 Long Range</h2>
+                        <h2 id="dashEvModel" style="font-size: 1.4rem; color: #ffffff; margin: 0;">Tata Nexon EV Max</h2>
                         <span class="badge badge-primary">Active Vehicle</span>
                     </div>
 
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; background: rgba(255,255,255,0.06); padding: 1rem; border-radius: var(--radius-md);">
                         <div>
                             <span style="display: block; font-size: 0.75rem; color: var(--text-light);">Estimated Range</span>
-                            <strong style="font-size: 1.25rem; font-family: var(--font-heading); color: var(--primary);">214 km</strong>
+                            <strong id="dashEvRange" style="font-size: 1.25rem; font-family: var(--font-heading); color: var(--primary);">195 km</strong>
                         </div>
                         <div>
                             <span style="display: block; font-size: 0.75rem; color: var(--text-light);">Battery Capacity</span>
-                            <strong style="font-size: 1.25rem; font-family: var(--font-heading); color: #ffffff;">75 kWh</strong>
+                            <strong id="dashEvCapacity" style="font-size: 1.25rem; font-family: var(--font-heading); color: #ffffff;">40.5 kWh</strong>
                         </div>
                         <div>
-                            <span style="display: block; font-size: 0.75rem; color: var(--text-light);">Connector Type</span>
-                            <strong style="font-size: 1.1rem; font-family: var(--font-heading); color: #ffffff;">CCS2 / Type 2</strong>
+                            <span style="display: block; font-size: 0.75rem; color: var(--text-light);">Connector Standard</span>
+                            <strong id="dashEvConnector" style="font-size: 1.1rem; font-family: var(--font-heading); color: #ffffff;">CCS2 DC / Type 2 AC</strong>
                         </div>
                         <div>
-                            <span style="display: block; font-size: 0.75rem; color: var(--text-light);">Charging Status</span>
+                            <span style="display: block; font-size: 0.75rem; color: var(--text-light);">Charging Telemetry</span>
                             <span class="badge badge-available">🟢 Ready to Charge</span>
                         </div>
                     </div>
@@ -153,7 +150,6 @@
                     </div>
                 </a>
                 <a href="stations.html" class="action-card">
-                    <div class="action-icon">🔌</div>
                     <div class="action-info">
                         <h4>Find Charger</h4>
                         <p>Locate fast charging hubs</p>
@@ -167,7 +163,6 @@
                     </div>
                 </a>
                 <a href="trip_history.html" class="action-card">
-                    <div class="action-icon">🕒</div>
                     <div class="action-info">
                         <h4>Trip History</h4>
                         <p>View past journey logs</p>
@@ -183,50 +178,50 @@
                         <span class="stat-title">Total Trips</span>
                         <span>🛣️</span>
                     </div>
-                    <div class="stat-value">28</div>
-                    <div class="stat-trend">↑ 12% this month</div>
+                    <div class="stat-value" id="statTotalTrips">34</div>
+                    <div class="stat-trend">↑ 8 this month</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
                         <span class="stat-title">Total Distance</span>
                         <span>📍</span>
                     </div>
-                    <div class="stat-value">3,420 km</div>
-                    <div class="stat-trend">↑ 410 km week</div>
+                    <div class="stat-value" id="statTotalDistance">4,120 km</div>
+                    <div class="stat-trend">↑ 520 km week</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
                         <span class="stat-title">Energy Consumed</span>
                         <span>⚡</span>
                     </div>
-                    <div class="stat-value">547 kWh</div>
-                    <div class="stat-trend">0.160 kWh/km avg</div>
+                    <div class="stat-value" id="statTotalEnergy">576.8 kWh</div>
+                    <div class="stat-trend">0.140 kWh/km avg</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
                         <span class="stat-title">Total Charging Cost</span>
                         <span>💳</span>
                     </div>
-                    <div class="stat-value">₹3,840</div>
-                    <div class="stat-trend">Saved ₹4,200 vs petrol</div>
+                    <div class="stat-value" id="statTotalCost">₹9,840</div>
+                    <div class="stat-trend">Saved ₹14,200 vs petrol</div>
                 </div>
             </div>
 
-            <!-- Recommended Station -->
+            <!-- Dynamic Recommended Station Near You -->
             <h3 style="font-size: 1.15rem; margin-bottom: 1rem;">Recommended Station Near You</h3>
-            <div class="card" style="border-left: 5px solid var(--primary);">
+            <div class="card" id="recommendedStationCard" style="border-left: 5px solid var(--primary);">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
                     <div>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <h2 style="font-size: 1.35rem; margin: 0;">AeroCity HyperCharge Superhub</h2>
-                            <span class="badge badge-available">🟢 Available</span>
+                            <h2 id="recStationName" style="font-size: 1.35rem; margin: 0;">Coimbatore Prozone Fast Charging Hub</h2>
+                            <span class="badge badge-available" id="recStationBadge">🟢 Available</span>
                         </div>
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">
-                            📍 Avinashi Road Sector 2, Coimbatore (3.2 km away)
+                        <p id="recStationLoc" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">
+                            📍 Saravanampatti / Sathy Rd, Coimbatore (3.2 km away)
                         </p>
                     </div>
 
-                    <a href="station_detail.html" class="btn btn-primary btn-sm">
+                    <a href="stations.html" class="btn btn-primary btn-sm">
                         View Station Details
                     </a>
                 </div>
@@ -234,27 +229,27 @@
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; background: var(--bg-main); padding: 1.25rem; border-radius: var(--radius-md);">
                     <div>
                         <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Available Chargers</span>
-                        <strong style="font-size: 1.1rem; color: var(--navy-dark);">6 / 8 Ports</strong>
+                        <strong id="recAvailableChargers" style="font-size: 1.1rem; color: var(--navy-dark);">4 / 6 Ports</strong>
                     </div>
                     <div>
                         <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Charging Speed</span>
-                        <strong style="font-size: 1.1rem; color: var(--primary-hover);">240 kW Supercharge</strong>
+                        <strong id="recSpeed" style="font-size: 1.1rem; color: var(--primary-hover);">120 kW Fast DC</strong>
                     </div>
                     <div>
                         <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Tariff Rate</span>
-                        <strong style="font-size: 1.1rem; color: var(--navy-dark);">₹18.5 / kWh</strong>
+                        <strong id="recTariff" style="font-size: 1.1rem; color: var(--navy-dark);">₹18.50 / kWh</strong>
                     </div>
                     <div>
                         <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Current Demand</span>
-                        <strong style="font-size: 1.1rem; color: var(--navy-dark);">42% (Low Queue)</strong>
+                        <strong id="recDemand" style="font-size: 1.1rem; color: var(--navy-dark);">38% (Low Queue)</strong>
                     </div>
                     <div>
-                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Predicted Demand</span>
-                        <strong style="font-size: 1.1rem; color: #f59e0b;">65% at 6 PM</strong>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Operator</span>
+                        <strong id="recOperator" style="font-size: 1.1rem; color: #3b82f6;">Tata Power EZ</strong>
                     </div>
                     <div>
                         <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Wait Time</span>
-                        <strong style="font-size: 1.1rem; color: var(--status-available);">0 mins</strong>
+                        <strong id="recWait" style="font-size: 1.1rem; color: var(--status-available);">0 mins</strong>
                     </div>
                 </div>
             </div>
@@ -268,5 +263,68 @@
 </div>
 
 <script src="assets/js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Dynamic User Profile Synchronization
+    const storedUser = localStorage.getItem('smartev_user');
+    let user = {
+        name: 'Dhanya Sakthi',
+        email: 'dhanya.sakthi@gmail.com',
+        evModel: 'Tata Nexon EV Max',
+        capacity: 40.5,
+        soc: 68,
+        efficiency: 0.14
+    };
+
+    if (storedUser) {
+        try {
+            const parsed = JSON.parse(storedUser);
+            if (parsed.name) user.name = parsed.name;
+            if (parsed.evModel) user.evModel = parsed.evModel;
+        } catch(e) {}
+    }
+
+    // Update Greeting & Profile in DOM
+    const hour = new Date().getHours();
+    const timeGreeting = hour < 12 ? 'Good morning' : (hour < 17 ? 'Good afternoon' : 'Good evening');
+    
+    document.getElementById('welcomeGreeting').innerHTML = `${timeGreeting}, ${user.name} 👋`;
+    document.getElementById('topbarUserName').innerText = user.name;
+    
+    const rangeKm = Math.round((user.capacity * (user.soc / 100)) / user.efficiency);
+    document.getElementById('topbarEvBadge').innerHTML = `${user.evModel}: <strong>${user.soc}%</strong> (~${rangeKm} km)`;
+    
+    document.getElementById('dashEvModel').innerText = user.evModel;
+    document.getElementById('dashBatteryPct').innerText = `${user.soc}%`;
+    document.getElementById('dashEvRange').innerText = `${rangeKm} km`;
+    document.getElementById('dashEvCapacity').innerText = `${user.capacity} kWh`;
+
+    // Calculate circumference offset for battery circle (2 * PI * 54 = 339.29)
+    const ring = document.getElementById('dashBatteryRing');
+    if (ring) {
+        const offset = 339.29 - (339.29 * user.soc / 100);
+        ring.style.strokeDashoffset = offset;
+    }
+
+    // 2. Fetch Live Dynamic Nearest Station from API
+    try {
+        const res = await fetch('/api/stations.php?city=Coimbatore');
+        const data = await res.json();
+        if (data.status === 'success' && data.stations && data.stations.length > 0) {
+            const stn = data.stations[0];
+            document.getElementById('recStationName').innerText = stn.name;
+            document.getElementById('recStationLoc').innerText = `📍 ${stn.location} (3.2 km away)`;
+            document.getElementById('recAvailableChargers').innerText = `${stn.available_chargers} / ${stn.total_chargers} Ports`;
+            document.getElementById('recSpeed').innerText = `${stn.charging_speed_kw} kW Fast DC`;
+            document.getElementById('recTariff').innerText = `₹${stn.price_per_kwh.toFixed(2)} / kWh`;
+            document.getElementById('recDemand').innerText = `${stn.predicted_demand_pct}% (${stn.predicted_demand_pct > 70 ? 'High Load' : 'Low Queue'})`;
+            document.getElementById('recOperator').innerText = stn.operator;
+            document.getElementById('recWait').innerText = `${stn.waiting_time_mins} mins`;
+        }
+    } catch(e) {
+        console.error("Nearest station API error:", e);
+    }
+});
+</script>
 </body>
 </html>
