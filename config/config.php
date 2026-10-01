@@ -12,6 +12,7 @@ define('APP_NAME', 'Smart EV RouteOpt Neo4j');
 define('APP_TITLE', 'Smart EV Charging Network Route Optimization & Predictive Demand Management');
 define('APP_VERSION', '1.0.0');
 define('BASE_URL', '/');
+define('BACKEND_API_URL', 'https://smartev-1.onrender.com');
 
 // Default user state for demo if not set
 if (!isset($_SESSION['user'])) {

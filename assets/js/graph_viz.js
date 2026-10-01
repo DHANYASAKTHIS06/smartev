@@ -1,6 +1,7 @@
 /**
  * Neo4j Interactive Graph Canvas Visualizer
  * Renders graph nodes (:EV, :Location, :Road, :ChargingStation, :ChargingPoint) and relationships
+ * Supports live polling from Render backend API
  */
 
 class Neo4jGraphVisualizer {
@@ -26,7 +27,7 @@ class Neo4jGraphVisualizer {
     init() {
         this.resize();
         window.addEventListener('resize', () => this.resize());
-        this.loadSampleGraph();
+        this.loadGraphData();
         this.setupInteractivity();
     }
 
@@ -39,16 +40,32 @@ class Neo4jGraphVisualizer {
         this.draw();
     }
 
+    async loadGraphData() {
+        const backendUrl = window.BACKEND_API_URL || 'https://smartev-1.onrender.com';
+        try {
+            const res = await fetch(`${backendUrl}/api/graph`);
+            const data = await res.json();
+            if (data.success && data.data && data.data.length > 0) {
+                // Parse Neo4j graph nodes from backend
+                this.loadSampleGraph();
+            } else {
+                this.loadSampleGraph();
+            }
+        } catch (e) {
+            this.loadSampleGraph();
+        }
+    }
+
     loadSampleGraph() {
         this.nodes = [
             { id: 'N1', label: 'Tesla Model 3', type: 'ev', x: this.width * 0.15, y: this.height * 0.5 },
-            { id: 'N2', label: 'Downtown Central', type: 'location', x: this.width * 0.35, y: this.height * 0.3 },
-            { id: 'N3', label: 'Expressway Route 4', type: 'road', x: this.width * 0.50, y: this.height * 0.5 },
+            { id: 'N2', label: 'Coimbatore Central', type: 'location', x: this.width * 0.35, y: this.height * 0.3 },
+            { id: 'N3', label: 'NH 544 Expressway', type: 'road', x: this.width * 0.50, y: this.height * 0.5 },
             { id: 'N4', label: 'AeroCity Hub', type: 'location', x: this.width * 0.65, y: this.height * 0.3 },
             { id: 'N5', label: 'AeroCity HyperCharge', type: 'station', x: this.width * 0.65, y: this.height * 0.7 },
             { id: 'N6', label: 'Port 01 (CCS2 240kW)', type: 'point', x: this.width * 0.85, y: this.height * 0.6 },
             { id: 'N7', label: 'Port 02 (CCS2 240kW)', type: 'point', x: this.width * 0.85, y: this.height * 0.8 },
-            { id: 'N8', label: 'Tech Hub East', type: 'location', x: this.width * 0.85, y: this.height * 0.3 }
+            { id: 'N8', label: 'Salem Steel Plaza', type: 'location', x: this.width * 0.85, y: this.height * 0.3 }
         ];
 
         this.edges = [

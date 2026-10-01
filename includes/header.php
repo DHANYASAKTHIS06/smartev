@@ -18,5 +18,10 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' | ' . APP_NAME : APP_TITLE;
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/dashboard.css">
     <link rel="stylesheet" href="/assets/css/graph.css">
+
+    <!-- Global Backend API Configuration -->
+    <script>
+        window.BACKEND_API_URL = "<?= BACKEND_API_URL ?>";
+    </script>
 </head>
 <body class="<?= isset($bodyClass) ? $bodyClass : '' ?>">
