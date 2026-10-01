@@ -60,3 +60,4 @@ Then visit `http://localhost:8000` in your web browser.
 - 🔄 **Dynamic Route Replanning**: Real-time grid failure rerouting and alternative comparison matrix.
 - 🌐 **Neo4j Network Graph**: Interactive canvas displaying `:EV`, `:Location`, `:Road`, `:ChargingStation`, and `:ChargingPoint` nodes.
 - ⚙️ **Admin Suite**: User management, EV model profiles, station hub management, charger units, and report generation.
+"# evpro" 
