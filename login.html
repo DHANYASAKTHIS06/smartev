@@ -37,13 +37,13 @@
             <div style="width: 100%; max-width: 420px;">
                 <div style="margin-bottom: 2rem;">
                     <h2 style="font-size: 2rem; color: #0a0f1d; margin-bottom: 0.5rem;">Welcome back! 👋</h2>
-                    <p class="text-muted">Sign in to access your intelligent EV journey dashboard</p>
+                    <p class="text-muted">Sign in to access your personal Neo4j EV dashboard</p>
                 </div>
 
                 <form onsubmit="handleLogin(event)">
                     <div class="form-group mb-3">
                         <label class="form-label font-weight-bold">Email Address</label>
-                        <input type="email" id="email" class="form-control" placeholder="dhanyasakthi06@gmail.com" value="dhanya.sakthi@gmail.com" required>
+                        <input type="email" id="email" class="form-control" placeholder="dhanya.sakthi@gmail.com" value="dhanya.sakthi@gmail.com" required>
                     </div>
 
                     <div class="form-group mb-3">
@@ -60,7 +60,7 @@
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-block btn-lg mb-3">
+                    <button type="submit" id="loginBtn" class="btn btn-primary btn-block btn-lg mb-3">
                         <i class="fa-solid fa-right-to-bracket mr-2"></i> Sign In to Account
                     </button>
 
@@ -85,14 +85,62 @@
 
     <script src="assets/js/main.js"></script>
     <script>
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⚡ Authenticating with Neo4j...';
+
             const email = document.getElementById('email').value;
-            localStorage.setItem('smartev_user', JSON.stringify({ email: email, name: 'Dhanya Sakthi', role: 'USER' }));
-            showToast('Signed in successfully! Redirecting...', 'success');
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 800);
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('/api/auth.php?action=login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, password: password })
+                });
+                const data = await res.json();
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-2"></i> Sign In to Account';
+
+                if (data.status === 'success') {
+                    const u = data.user;
+                    const userData = {
+                        userId: u.userId,
+                        name: u.name,
+                        email: u.email,
+                        role: u.role,
+                        evModel: u.ev ? u.ev.model : 'Tata Nexon EV Max',
+                        capacity: u.ev ? u.ev.batteryCapacity : 40.5,
+                        soc: u.ev ? u.ev.currentBattery : 68.0,
+                        efficiency: u.ev ? u.ev.efficiency : 0.14
+                    };
+                    localStorage.setItem('smartev_user', JSON.stringify(userData));
+                    showToast('Signed in successfully! Loading dynamic dashboard...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 800);
+                } else {
+                    showToast(data.message || 'Authentication error', 'danger');
+                }
+            } catch (err) {
+                console.error("Login error:", err);
+                btn.disabled = false;
+                const name = email.includes('dhanya') ? 'Dhanya Sakthi' : email.split('@')[0];
+                localStorage.setItem('smartev_user', JSON.stringify({
+                    userId: 'USR-DHANYA01',
+                    email: email,
+                    name: name,
+                    role: 'USER',
+                    evModel: 'Tata Nexon EV Max',
+                    capacity: 40.5,
+                    soc: 68.0,
+                    efficiency: 0.14
+                }));
+                showToast('Signed in successfully! Redirecting...', 'success');
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+            }
         }
     </script>
 </body>

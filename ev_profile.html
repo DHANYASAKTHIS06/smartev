@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EV Garage & Vehicle Profiles - Smart EV</title>
+    <title>EV Garage & Vehicle Profiles - Smart EV Neo4j</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -24,9 +24,9 @@
             <div class="nav-auth">
                 <div class="user-pill">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="avatar-sm">
-                    <span class="user-name">Dhanya Sakthi</span>
+                    <span class="user-name" id="navUserName">Dhanya Sakthi</span>
                 </div>
-                <a href="index.html" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-right-from-bracket"></i></a>
+                <a href="login.html" onclick="localStorage.removeItem('smartev_user')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-right-from-bracket"></i></a>
             </div>
         </div>
     </nav>
@@ -36,169 +36,130 @@
         <div class="container d-flex justify-between align-center">
             <div>
                 <h1 class="h2 mb-1"><i class="fa-solid fa-car-side text-primary"></i> EV Garage & Vehicle Profiles</h1>
-                <p class="text-muted-light mb-0">Manage your connected electric vehicles, battery health telemetry, and charging specs for Cypher route computations.</p>
+                <p class="text-muted-light mb-0">Manage your connected electric vehicles in Neo4j (<code>(User)-[:OWNS]->(EV)</code>). Full dynamic CRUD operations.</p>
             </div>
             <div>
-                <button class="btn btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add New Vehicle Profile</button>
+                <button class="btn btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add New Vehicle Node</button>
             </div>
         </div>
     </header>
 
     <!-- Main Container -->
     <main class="container my-5">
+        <!-- Live Cypher Log Card -->
+        <div class="card mb-4 shadow-sm" id="cypherLogCard" style="display:none; background:#0a0f1d; color:#00d176; border:1px solid #1f2937;">
+            <div class="card-body p-3 font-mono text-xs">
+                <div class="d-flex justify-between align-center mb-1">
+                    <span class="text-white font-weight-bold"><i class="fa-solid fa-terminal text-primary"></i> Last Neo4j Cypher Query Executed:</span>
+                    <button class="btn btn-xs btn-outline-light" onclick="document.getElementById('cypherLogCard').style.display='none'">Close</button>
+                </div>
+                <pre class="mb-0" id="cypherLogText" style="white-space: pre-wrap; word-break: break-all;"></pre>
+            </div>
+        </div>
+
         <div class="grid grid-3 gap-4" id="evGrid">
-            <!-- EV 1 (Default) -->
-            <div class="card card-hover shadow-sm border-primary">
-                <div class="position-relative">
-                    <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=600&auto=format&fit=crop&q=80" alt="Tata Nexon EV" style="height: 180px; width: 100%; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-                    <span class="badge badge-success position-absolute top-2 right-2">ACTIVE VEHICLE</span>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-between align-center mb-2">
-                        <h3 class="h5 mb-0 text-dark">Tata Nexon EV Max</h3>
-                        <span class="badge badge-secondary">TN-38-BZ-4401</span>
-                    </div>
-                    <div class="grid grid-2 gap-2 my-3 text-sm">
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Battery Pack</span>
-                            <strong class="text-dark">40.5 kWh</strong>
-                        </div>
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Current SoC</span>
-                            <strong class="text-success">68% (27.5 kWh)</strong>
-                        </div>
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Max DC Charge</span>
-                            <strong class="text-dark">50 kW CCS2</strong>
-                        </div>
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Efficiency</span>
-                            <strong class="text-dark">0.14 kWh/km</strong>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-between align-center pt-2 border-top">
-                        <button class="btn btn-sm btn-outline-primary" onclick="editVehicle('Tata Nexon EV Max')"><i class="fa-solid fa-pen"></i> Edit</button>
-                        <span class="text-xs text-muted"><i class="fa-solid fa-circle-check text-success"></i> Neo4j Synced</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- EV 2 -->
-            <div class="card card-hover shadow-sm">
-                <div class="position-relative">
-                    <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=600&auto=format&fit=crop&q=80" alt="MG ZS EV" style="height: 180px; width: 100%; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-between align-center mb-2">
-                        <h3 class="h5 mb-0 text-dark">MG ZS EV Long Range</h3>
-                        <span class="badge badge-secondary">TN-37-AA-9902</span>
-                    </div>
-                    <div class="grid grid-2 gap-2 my-3 text-sm">
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Battery Pack</span>
-                            <strong class="text-dark">50.3 kWh</strong>
-                        </div>
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Current SoC</span>
-                            <strong class="text-warning">42% (21.1 kWh)</strong>
-                        </div>
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Max DC Charge</span>
-                            <strong class="text-dark">80 kW CCS2</strong>
-                        </div>
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Efficiency</span>
-                            <strong class="text-dark">0.16 kWh/km</strong>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-between align-center pt-2 border-top">
-                        <button class="btn btn-sm btn-outline-primary" onclick="editVehicle('MG ZS EV')"><i class="fa-solid fa-pen"></i> Edit</button>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="setDefault('MG ZS EV Long Range')">Set Default</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- EV 3 -->
-            <div class="card card-hover shadow-sm">
-                <div class="position-relative">
-                    <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=600&auto=format&fit=crop&q=80" alt="Hyundai Ioniq 5" style="height: 180px; width: 100%; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-between align-center mb-2">
-                        <h3 class="h5 mb-0 text-dark">Hyundai Ioniq 5</h3>
-                        <span class="badge badge-secondary">TN-07-CK-1122</span>
-                    </div>
-                    <div class="grid grid-2 gap-2 my-3 text-sm">
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Battery Pack</span>
-                            <strong class="text-dark">72.6 kWh</strong>
-                        </div>
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Current SoC</span>
-                            <strong class="text-success">85% (61.7 kWh)</strong>
-                        </div>
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Max DC Charge</span>
-                            <strong class="text-dark">350 kW CCS2</strong>
-                        </div>
-                        <div class="p-2 bg-light rounded">
-                            <span class="text-muted d-block text-xs">Efficiency</span>
-                            <strong class="text-dark">0.17 kWh/km</strong>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-between align-center pt-2 border-top">
-                        <button class="btn btn-sm btn-outline-primary" onclick="editVehicle('Hyundai Ioniq 5')"><i class="fa-solid fa-pen"></i> Edit</button>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="setDefault('Hyundai Ioniq 5')">Set Default</button>
-                    </div>
-                </div>
+            <!-- Dynamically populated via Neo4j API -->
+            <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <div class="spinner text-primary" style="font-size: 2rem;">⚡</div>
+                <p class="text-muted mt-2">Loading your vehicle nodes from Neo4j AuraDB...</p>
             </div>
         </div>
     </main>
 
     <!-- Add EV Modal -->
     <div id="addModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;">
-        <div class="modal-dialog bg-white rounded p-4" style="max-width:500px; width:90%;">
+        <div class="modal-dialog bg-white rounded p-4" style="max-width:520px; width:90%;">
             <div class="d-flex justify-between align-center mb-3">
-                <h3 class="h5 mb-0 text-dark"><i class="fa-solid fa-car text-primary"></i> Register EV Profile</h3>
+                <h3 class="h5 mb-0 text-dark"><i class="fa-solid fa-car text-primary"></i> Create EV Node in Neo4j</h3>
                 <button type="button" class="btn btn-sm btn-light" onclick="closeAddModal()">&times;</button>
             </div>
-            <form onsubmit="handleSaveEV(event)">
+            <form onsubmit="handleCreateEV(event)">
                 <div class="form-group mb-2">
-                    <label class="form-label text-sm">Vehicle Model</label>
-                    <input type="text" class="form-control" placeholder="e.g. BYD Atto 3 / Mahindra XUV400" required>
+                    <label class="form-label text-sm font-weight-bold">Vehicle Model</label>
+                    <input type="text" id="addModel" class="form-control" placeholder="e.g. Tata Nexon EV Max / MG ZS EV" required>
                 </div>
                 <div class="form-group mb-2">
-                    <label class="form-label text-sm">Registration Number</label>
-                    <input type="text" class="form-control" placeholder="e.g. TN-38-CC-1234" required>
+                    <label class="form-label text-sm font-weight-bold">Registration Number</label>
+                    <input type="text" id="addReg" class="form-control" placeholder="e.g. TN-38-BZ-4401" required>
                 </div>
                 <div class="grid grid-2 gap-2 mb-2">
                     <div class="form-group">
-                        <label class="form-label text-sm">Battery (kWh)</label>
-                        <input type="number" step="0.1" class="form-control" placeholder="60.4" required>
+                        <label class="form-label text-sm font-weight-bold">Battery Pack (kWh)</label>
+                        <input type="number" id="addCapacity" step="0.1" class="form-control" placeholder="40.5" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label text-sm">Current SoC (%)</label>
-                        <input type="number" min="1" max="100" class="form-control" placeholder="75" required>
+                        <label class="form-label text-sm font-weight-bold">Current SoC (%)</label>
+                        <input type="number" id="addSoc" min="1" max="100" class="form-control" placeholder="75" required>
                     </div>
                 </div>
                 <div class="grid grid-2 gap-2 mb-3">
                     <div class="form-group">
-                        <label class="form-label text-sm">Max DC Power (kW)</label>
-                        <input type="number" class="form-control" placeholder="80" required>
+                        <label class="form-label text-sm font-weight-bold">Max DC Power (kW)</label>
+                        <input type="number" id="addPower" class="form-control" placeholder="50" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label text-sm">Connector Type</label>
-                        <select class="form-control">
-                            <option>CCS2</option>
-                            <option>Type 2 AC</option>
-                            <option>CHAdeMO</option>
-                            <option>GB/T</option>
+                        <label class="form-label text-sm font-weight-bold">Connector Standard</label>
+                        <select id="addConnector" class="form-control">
+                            <option value="CCS2">CCS2 (DC Fast)</option>
+                            <option value="Type 2 AC">Type 2 AC</option>
+                            <option value="CHAdeMO">CHAdeMO</option>
+                            <option value="GB/T">GB/T</option>
                         </select>
                     </div>
                 </div>
-                <div class="d-flex justify-end gap-2">
+                <div class="d-flex justify-end gap-2 pt-2 border-top">
                     <button type="button" class="btn btn-outline-secondary" onclick="closeAddModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Vehicle</button>
+                    <button type="submit" id="addSubmitBtn" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Create in Neo4j</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit EV Modal -->
+    <div id="editModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;">
+        <div class="modal-dialog bg-white rounded p-4" style="max-width:520px; width:90%;">
+            <div class="d-flex justify-between align-center mb-3">
+                <h3 class="h5 mb-0 text-dark"><i class="fa-solid fa-pen-to-square text-primary"></i> Update EV Node in Neo4j</h3>
+                <button type="button" class="btn btn-sm btn-light" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form onsubmit="handleUpdateEV(event)">
+                <input type="hidden" id="editEvId">
+                <div class="form-group mb-2">
+                    <label class="form-label text-sm font-weight-bold">Vehicle Model</label>
+                    <input type="text" id="editModel" class="form-control" required>
+                </div>
+                <div class="form-group mb-2">
+                    <label class="form-label text-sm font-weight-bold">Registration Number</label>
+                    <input type="text" id="editReg" class="form-control" required>
+                </div>
+                <div class="grid grid-2 gap-2 mb-2">
+                    <div class="form-group">
+                        <label class="form-label text-sm font-weight-bold">Battery Pack (kWh)</label>
+                        <input type="number" id="editCapacity" step="0.1" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label text-sm font-weight-bold">Current SoC (%)</label>
+                        <input type="number" id="editSoc" min="1" max="100" class="form-control" required>
+                    </div>
+                </div>
+                <div class="grid grid-2 gap-2 mb-3">
+                    <div class="form-group">
+                        <label class="form-label text-sm font-weight-bold">Max DC Power (kW)</label>
+                        <input type="number" id="editPower" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label text-sm font-weight-bold">Connector Standard</label>
+                        <select id="editConnector" class="form-control">
+                            <option value="CCS2">CCS2 (DC Fast)</option>
+                            <option value="Type 2 AC">Type 2 AC</option>
+                            <option value="CHAdeMO">CHAdeMO</option>
+                            <option value="GB/T">GB/T</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex justify-end gap-2 pt-2 border-top">
+                    <button type="button" class="btn btn-outline-secondary" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" id="editSubmitBtn" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Update in Neo4j</button>
                 </div>
             </form>
         </div>
@@ -213,22 +174,237 @@
 
     <script src="assets/js/main.js"></script>
     <script>
-        function openAddModal() {
-            document.getElementById('addModal').style.display = 'flex';
+        let currentEVs = [];
+        const user = window.SmartEVData.getUser();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navName = document.getElementById('navUserName');
+            if (navName) navName.innerText = user.name;
+            fetchUserEVs();
+        });
+
+        async function fetchUserEVs() {
+            const grid = document.getElementById('evGrid');
+            try {
+                const res = await fetch(`/api/ev.php?action=list&userId=${encodeURIComponent(user.userId || 'USR-DHANYA01')}`);
+                const data = await res.json();
+                
+                if (data.status === 'success' && data.evs && data.evs.length > 0) {
+                    currentEVs = data.evs;
+                    renderEVGrid(data.evs);
+                    if (data.cypher_executed) showCypher(data.cypher_executed);
+                } else {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 3rem; background: #fff; border-radius: 8px;">
+                            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🚗</div>
+                            <h4 class="text-dark">No Vehicles Registered</h4>
+                            <p class="text-muted mb-3">Add your first EV node to connect it to your profile in Neo4j.</p>
+                            <button class="btn btn-primary btn-sm" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add Vehicle Node</button>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                console.error("Fetch EVs error:", e);
+            }
         }
-        function closeAddModal() {
-            document.getElementById('addModal').style.display = 'none';
+
+        function renderEVGrid(evs) {
+            const grid = document.getElementById('evGrid');
+            const activeEvId = localStorage.getItem('smartev_active_ev_id') || evs[0].evId;
+
+            grid.innerHTML = evs.map(ev => {
+                const isActive = (ev.evId === activeEvId);
+                const rangeKm = Math.round((ev.batteryCapacity * (ev.currentBattery / 100)) / (ev.efficiency || 0.14));
+                return `
+                    <div class="card card-hover shadow-sm ${isActive ? 'border-primary' : ''}">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=600&auto=format&fit=crop&q=80" alt="${ev.model}" style="height: 180px; width: 100%; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                            ${isActive ? '<span class="badge badge-success position-absolute top-2 right-2">ACTIVE VEHICLE</span>' : ''}
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-between align-center mb-2">
+                                <h3 class="h5 mb-0 text-dark">${ev.model}</h3>
+                                <span class="badge badge-secondary">${ev.registrationNumber || ev.evId}</span>
+                            </div>
+                            <div class="grid grid-2 gap-2 my-3 text-sm">
+                                <div class="p-2 bg-light rounded">
+                                    <span class="text-muted d-block text-xs">Battery Pack</span>
+                                    <strong class="text-dark">${ev.batteryCapacity} kWh</strong>
+                                </div>
+                                <div class="p-2 bg-light rounded">
+                                    <span class="text-muted d-block text-xs">Current SoC</span>
+                                    <strong class="text-success">${ev.currentBattery}% (~${rangeKm} km)</strong>
+                                </div>
+                                <div class="p-2 bg-light rounded">
+                                    <span class="text-muted d-block text-xs">Max DC Power</span>
+                                    <strong class="text-dark">${ev.maxChargingPower} kW ${ev.connectorType}</strong>
+                                </div>
+                                <div class="p-2 bg-light rounded">
+                                    <span class="text-muted d-block text-xs">Efficiency</span>
+                                    <strong class="text-dark">${ev.efficiency || 0.14} kWh/km</strong>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-between align-center pt-2 border-top">
+                                <button class="btn btn-sm btn-outline-primary" onclick="openEditModal('${ev.evId}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                                <div class="d-flex gap-1">
+                                    ${!isActive ? `<button class="btn btn-sm btn-outline-secondary" onclick="setActiveEV('${ev.evId}', '${ev.model}', ${ev.batteryCapacity}, ${ev.currentBattery})">Set Active</button>` : ''}
+                                    <button class="btn btn-sm btn-outline-danger" onclick="handleDeleteEV('${ev.evId}', '${ev.model}')"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
-        function handleSaveEV(e) {
+
+        function showCypher(statement) {
+            const card = document.getElementById('cypherLogCard');
+            const txt = document.getElementById('cypherLogText');
+            if (card && txt) {
+                txt.innerText = statement;
+                card.style.display = 'block';
+            }
+        }
+
+        // Add Modal Handlers
+        function openAddModal() { document.getElementById('addModal').style.display = 'flex'; }
+        function closeAddModal() { document.getElementById('addModal').style.display = 'none'; }
+
+        async function handleCreateEV(e) {
             e.preventDefault();
-            closeAddModal();
-            showToast('New vehicle registered and mapped into Neo4j graph!', 'success');
+            const btn = document.getElementById('addSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⚡ Creating in Neo4j...';
+
+            const payload = {
+                userId: user.userId || 'USR-DHANYA01',
+                model: document.getElementById('addModel').value,
+                registrationNumber: document.getElementById('addReg').value,
+                batteryCapacity: parseFloat(document.getElementById('addCapacity').value),
+                currentBattery: parseFloat(document.getElementById('addSoc').value),
+                maxChargingPower: parseFloat(document.getElementById('addPower').value),
+                connectorType: document.getElementById('addConnector').value,
+                efficiency: 0.14
+            };
+
+            try {
+                const res = await fetch('/api/ev.php?action=create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                closeAddModal();
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Create in Neo4j';
+
+                if (data.status === 'success') {
+                    showToast(`Vehicle '${payload.model}' node created and linked in Neo4j!`, 'success');
+                    fetchUserEVs();
+                } else {
+                    showToast(data.message || 'Error creating vehicle', 'danger');
+                }
+            } catch (err) {
+                console.error("Create EV error:", err);
+                closeAddModal();
+                btn.disabled = false;
+            }
         }
-        function setDefault(model) {
-            showToast(`${model} set as default vehicle for route optimizations`, 'success');
+
+        // Edit Modal Handlers
+        function openEditModal(evId) {
+            const ev = currentEVs.find(e => e.evId === evId);
+            if (!ev) return;
+
+            document.getElementById('editEvId').value = ev.evId;
+            document.getElementById('editModel').value = ev.model;
+            document.getElementById('editReg').value = ev.registrationNumber || '';
+            document.getElementById('editCapacity').value = ev.batteryCapacity;
+            document.getElementById('editSoc').value = ev.currentBattery;
+            document.getElementById('editPower').value = ev.maxChargingPower;
+            document.getElementById('editConnector').value = ev.connectorType;
+
+            document.getElementById('editModal').style.display = 'flex';
         }
-        function editVehicle(model) {
-            showToast(`Editing parameters for ${model}`, 'info');
+        function closeEditModal() { document.getElementById('editModal').style.display = 'none'; }
+
+        async function handleUpdateEV(e) {
+            e.preventDefault();
+            const btn = document.getElementById('editSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⚡ Updating in Neo4j...';
+
+            const payload = {
+                userId: user.userId || 'USR-DHANYA01',
+                evId: document.getElementById('editEvId').value,
+                model: document.getElementById('editModel').value,
+                registrationNumber: document.getElementById('editReg').value,
+                batteryCapacity: parseFloat(document.getElementById('editCapacity').value),
+                currentBattery: parseFloat(document.getElementById('editSoc').value),
+                maxChargingPower: parseFloat(document.getElementById('editPower').value),
+                connectorType: document.getElementById('editConnector').value,
+                efficiency: 0.14
+            };
+
+            try {
+                const res = await fetch('/api/ev.php?action=update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                closeEditModal();
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update in Neo4j';
+
+                if (data.status === 'success') {
+                    showToast(`EV node '${payload.model}' updated in Neo4j AuraDB!`, 'success');
+                    fetchUserEVs();
+                } else {
+                    showToast(data.message || 'Error updating vehicle', 'danger');
+                }
+            } catch (err) {
+                console.error("Update EV error:", err);
+                closeEditModal();
+                btn.disabled = false;
+            }
+        }
+
+        // Delete Handler
+        async function handleDeleteEV(evId, model) {
+            if (!confirm(`Are you sure you want to delete '${model}' from Neo4j?`)) return;
+
+            try {
+                const res = await fetch('/api/ev.php?action=delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: user.userId || 'USR-DHANYA01',
+                        evId: evId
+                    })
+                });
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    showToast(`EV node '${model}' removed from Neo4j AuraDB!`, 'success');
+                    fetchUserEVs();
+                } else {
+                    showToast(data.message || 'Error deleting vehicle', 'danger');
+                }
+            } catch (err) {
+                console.error("Delete EV error:", err);
+            }
+        }
+
+        function setActiveEV(evId, model, capacity, soc) {
+            localStorage.setItem('smartev_active_ev_id', evId);
+            const user = window.SmartEVData.getUser();
+            user.evModel = model;
+            user.capacity = capacity;
+            user.soc = soc;
+            localStorage.setItem('smartev_user', JSON.stringify(user));
+            showToast(`${model} set as active vehicle for route calculations and dashboard!`, 'success');
+            fetchUserEVs();
         }
     </script>
 </body>
