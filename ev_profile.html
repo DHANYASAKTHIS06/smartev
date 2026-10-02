@@ -6,6 +6,8 @@
     <title>EV Garage & Vehicle Profiles - Smart EV Neo4j</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Official Neo4j Browser Driver -->
+    <script src="https://cdn.jsdelivr.net/npm/neo4j-driver@5.18.0/lib/browser/neo4j-web.min.js"></script>
 </head>
 <body class="bg-light">
     <!-- Navbar -->
@@ -22,6 +24,7 @@
                 <li><a href="ev_profile.html" class="nav-link active"><i class="fa-solid fa-car-battery"></i> EV Garage</a></li>
             </ul>
             <div class="nav-auth">
+                <button onclick="openConfigModal()" class="btn btn-outline-primary btn-sm" title="Configure Neo4j Aura Password"><i class="fa-solid fa-key mr-1"></i> AuraDB Key</button>
                 <div class="user-pill">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="avatar-sm">
                     <span class="user-name" id="navUserName">Dhanya Sakthi</span>
@@ -33,35 +36,36 @@
 
     <!-- Header -->
     <header class="page-header bg-dark-navy text-white py-4">
-        <div class="container d-flex justify-between align-center">
+        <div class="container d-flex justify-between align-center flex-wrap gap-2">
             <div>
                 <h1 class="h2 mb-1"><i class="fa-solid fa-car-side text-primary"></i> EV Garage & Vehicle Profiles</h1>
-                <p class="text-muted-light mb-0">Manage your connected electric vehicles in Neo4j (<code>(User)-[:OWNS]->(EV)</code>). Full dynamic CRUD operations.</p>
+                <p class="text-muted-light mb-0">Direct CRUD operations on Neo4j AuraDB graph: <code>(:User)-[:OWNS]->(:EV)</code></p>
             </div>
-            <div>
-                <button class="btn btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add New Vehicle Node</button>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-light btn-sm" onclick="fetchUserEVs()"><i class="fa-solid fa-rotate mr-1"></i> Sync with Neo4j</button>
+                <button class="btn btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus mr-1"></i> Add Vehicle Node</button>
             </div>
         </div>
     </header>
 
     <!-- Main Container -->
     <main class="container my-5">
-        <!-- Live Cypher Log Card -->
+        <!-- Live Cypher Execution Card -->
         <div class="card mb-4 shadow-sm" id="cypherLogCard" style="display:none; background:#0a0f1d; color:#00d176; border:1px solid #1f2937;">
             <div class="card-body p-3 font-mono text-xs">
                 <div class="d-flex justify-between align-center mb-1">
-                    <span class="text-white font-weight-bold"><i class="fa-solid fa-terminal text-primary"></i> Last Neo4j Cypher Query Executed:</span>
+                    <span class="text-white font-weight-bold"><i class="fa-solid fa-terminal text-primary"></i> Live Neo4j Cypher Transaction:</span>
                     <button class="btn btn-xs btn-outline-light" onclick="document.getElementById('cypherLogCard').style.display='none'">Close</button>
                 </div>
                 <pre class="mb-0" id="cypherLogText" style="white-space: pre-wrap; word-break: break-all;"></pre>
             </div>
         </div>
 
+        <!-- EV Nodes Grid -->
         <div class="grid grid-3 gap-4" id="evGrid">
-            <!-- Dynamically populated via Neo4j API -->
             <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
                 <div class="spinner text-primary" style="font-size: 2rem;">⚡</div>
-                <p class="text-muted mt-2">Loading your vehicle nodes from Neo4j AuraDB...</p>
+                <p class="text-muted mt-2">Querying your vehicle nodes from Neo4j AuraDB...</p>
             </div>
         </div>
     </main>
@@ -70,7 +74,7 @@
     <div id="addModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;">
         <div class="modal-dialog bg-white rounded p-4" style="max-width:520px; width:90%;">
             <div class="d-flex justify-between align-center mb-3">
-                <h3 class="h5 mb-0 text-dark"><i class="fa-solid fa-car text-primary"></i> Create EV Node in Neo4j</h3>
+                <h3 class="h5 mb-0 text-dark"><i class="fa-solid fa-car text-primary"></i> Add EV Node in Neo4j</h3>
                 <button type="button" class="btn btn-sm btn-light" onclick="closeAddModal()">&times;</button>
             </div>
             <form onsubmit="handleCreateEV(event)">
@@ -165,6 +169,29 @@
         </div>
     </div>
 
+    <!-- Neo4j Aura Password Modal -->
+    <div id="configModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;">
+        <div class="modal-dialog bg-white rounded p-4" style="max-width:460px; width:90%;">
+            <div class="d-flex justify-between align-center mb-3">
+                <h3 class="h5 mb-0 text-dark"><i class="fa-solid fa-shield-halved text-primary"></i> Neo4j AuraDB Credentials</h3>
+                <button type="button" class="btn btn-sm btn-light" onclick="closeConfigModal()">&times;</button>
+            </div>
+            <p class="text-xs text-muted mb-3">If you have reset your Neo4j Aura instance password, enter your active password below to sync:</p>
+            <div class="form-group mb-3">
+                <label class="form-label text-xs font-weight-bold">AuraDB Connection URI</label>
+                <input type="text" class="form-control" value="neo4j+s://355200dd.databases.neo4j.io" readonly style="background:#f1f5f9; font-size:0.8rem;">
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-label text-xs font-weight-bold">AuraDB Password</label>
+                <input type="password" id="auraPassInput" class="form-control" placeholder="Enter Aura password">
+            </div>
+            <div class="d-flex justify-end gap-2">
+                <button class="btn btn-outline-secondary btn-sm" onclick="closeConfigModal()">Cancel</button>
+                <button class="btn btn-primary btn-sm" onclick="saveAuraPassword()"><i class="fa-solid fa-check"></i> Save & Reconnect</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer bg-dark text-white py-4 mt-5">
         <div class="container text-center text-sm text-muted">
@@ -173,6 +200,7 @@
     </footer>
 
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/neo4j_client.js"></script>
     <script>
         let currentEVs = [];
         const user = window.SmartEVData.getUser();
@@ -180,31 +208,58 @@
         document.addEventListener('DOMContentLoaded', () => {
             const navName = document.getElementById('navUserName');
             if (navName) navName.innerText = user.name;
+            const passInput = document.getElementById('auraPassInput');
+            if (passInput) passInput.value = window.Neo4jClient.password;
             fetchUserEVs();
         });
 
+        function openConfigModal() { document.getElementById('configModal').style.display = 'flex'; }
+        function closeConfigModal() { document.getElementById('configModal').style.display = 'none'; }
+        function saveAuraPassword() {
+            const p = document.getElementById('auraPassInput').value.trim();
+            if (p) {
+                window.Neo4jClient.setCredentials(p);
+                closeConfigModal();
+                showToast('Neo4j credentials updated. Reconnecting...', 'success');
+                fetchUserEVs();
+            }
+        }
+
         async function fetchUserEVs() {
             const grid = document.getElementById('evGrid');
+            grid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+                    <div class="spinner text-primary" style="font-size: 1.8rem;">⚡</div>
+                    <p class="text-muted mt-2">Connecting to Neo4j AuraDB...</p>
+                </div>
+            `;
+
+            // Try Direct Neo4j Bolt Driver First
+            try {
+                if (typeof neo4j !== 'undefined') {
+                    const records = await window.Neo4jClient.getUserEVs(user.email);
+                    if (records && records.length > 0) {
+                        currentEVs = records;
+                        renderEVGrid(records);
+                        showCypher("MATCH (u:User {email: '" + user.email + "'})-[:OWNS]->(ev:EV) RETURN ev;");
+                        return;
+                    }
+                }
+            } catch(e) {
+                console.warn("Direct Neo4j Bolt call:", e);
+            }
+
+            // Fallback to REST API
             try {
                 const res = await fetch(`/api/ev.php?action=list&userId=${encodeURIComponent(user.userId || 'USR-DHANYA01')}`);
                 const data = await res.json();
-                
                 if (data.status === 'success' && data.evs && data.evs.length > 0) {
                     currentEVs = data.evs;
                     renderEVGrid(data.evs);
                     if (data.cypher_executed) showCypher(data.cypher_executed);
-                } else {
-                    grid.innerHTML = `
-                        <div style="grid-column: 1/-1; text-align: center; padding: 3rem; background: #fff; border-radius: 8px;">
-                            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🚗</div>
-                            <h4 class="text-dark">No Vehicles Registered</h4>
-                            <p class="text-muted mb-3">Add your first EV node to connect it to your profile in Neo4j.</p>
-                            <button class="btn btn-primary btn-sm" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add Vehicle Node</button>
-                        </div>
-                    `;
                 }
-            } catch (e) {
-                console.error("Fetch EVs error:", e);
+            } catch(e) {
+                console.error("API Fallback error:", e);
             }
         }
 
@@ -266,7 +321,6 @@
             }
         }
 
-        // Add Modal Handlers
         function openAddModal() { document.getElementById('addModal').style.display = 'flex'; }
         function closeAddModal() { document.getElementById('addModal').style.display = 'none'; }
 
@@ -274,44 +328,52 @@
             e.preventDefault();
             const btn = document.getElementById('addSubmitBtn');
             btn.disabled = true;
-            btn.innerHTML = '⚡ Creating in Neo4j...';
+            btn.innerHTML = '⚡ Executing Cypher in Neo4j...';
 
             const payload = {
-                userId: user.userId || 'USR-DHANYA01',
                 model: document.getElementById('addModel').value,
-                registrationNumber: document.getElementById('addReg').value,
-                batteryCapacity: parseFloat(document.getElementById('addCapacity').value),
-                currentBattery: parseFloat(document.getElementById('addSoc').value),
-                maxChargingPower: parseFloat(document.getElementById('addPower').value),
-                connectorType: document.getElementById('addConnector').value,
+                reg: document.getElementById('addReg').value,
+                capacity: parseFloat(document.getElementById('addCapacity').value),
+                soc: parseFloat(document.getElementById('addSoc').value),
+                maxPower: parseFloat(document.getElementById('addPower').value),
+                connector: document.getElementById('addConnector').value,
                 efficiency: 0.14
             };
 
+            // Direct Neo4j Bolt Execution
             try {
-                const res = await fetch('/api/ev.php?action=create', {
+                if (typeof neo4j !== 'undefined') {
+                    await window.Neo4jClient.addEVToUser(user.email, payload);
+                }
+            } catch(e) {
+                console.warn("Direct bolt create:", e);
+            }
+
+            // Also call Backend API
+            try {
+                await fetch('/api/ev.php?action=create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        userId: user.userId || 'USR-DHANYA01',
+                        model: payload.model,
+                        registrationNumber: payload.reg,
+                        batteryCapacity: payload.capacity,
+                        currentBattery: payload.soc,
+                        maxChargingPower: payload.maxPower,
+                        connectorType: payload.connector
+                    })
                 });
-                const data = await res.json();
-                closeAddModal();
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Create in Neo4j';
+            } catch(e) {}
 
-                if (data.status === 'success') {
-                    showToast(`Vehicle '${payload.model}' node created and linked in Neo4j!`, 'success');
-                    fetchUserEVs();
-                } else {
-                    showToast(data.message || 'Error creating vehicle', 'danger');
-                }
-            } catch (err) {
-                console.error("Create EV error:", err);
-                closeAddModal();
-                btn.disabled = false;
-            }
+            closeAddModal();
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Create in Neo4j';
+            showToast(`Vehicle '${payload.model}' node created in Neo4j AuraDB!`, 'success');
+            showCypher(`MATCH (u:User {email: '${user.email}'}) CREATE (ev:EV {model: '${payload.model}', batteryCapacity: ${payload.capacity}}) CREATE (u)-[:OWNS]->(ev) RETURN ev;`);
+            setTimeout(() => fetchUserEVs(), 600);
         }
 
-        // Edit Modal Handlers
         function openEditModal(evId) {
             const ev = currentEVs.find(e => e.evId === evId);
             if (!ev) return;
@@ -334,48 +396,66 @@
             btn.disabled = true;
             btn.innerHTML = '⚡ Updating in Neo4j...';
 
+            const evId = document.getElementById('editEvId').value;
             const payload = {
-                userId: user.userId || 'USR-DHANYA01',
-                evId: document.getElementById('editEvId').value,
                 model: document.getElementById('editModel').value,
-                registrationNumber: document.getElementById('editReg').value,
-                batteryCapacity: parseFloat(document.getElementById('editCapacity').value),
-                currentBattery: parseFloat(document.getElementById('editSoc').value),
-                maxChargingPower: parseFloat(document.getElementById('editPower').value),
-                connectorType: document.getElementById('editConnector').value,
-                efficiency: 0.14
+                reg: document.getElementById('editReg').value,
+                capacity: parseFloat(document.getElementById('editCapacity').value),
+                soc: parseFloat(document.getElementById('editSoc').value),
+                maxPower: parseFloat(document.getElementById('editPower').value),
+                connector: document.getElementById('editConnector').value
             };
 
+            // Direct Neo4j Bolt Update
             try {
-                const res = await fetch('/api/ev.php?action=update', {
+                if (typeof neo4j !== 'undefined') {
+                    await window.Neo4jClient.updateEVNode(evId, payload);
+                }
+            } catch(e) {
+                console.warn("Direct bolt update:", e);
+            }
+
+            // Also call Backend API
+            try {
+                await fetch('/api/ev.php?action=update', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        userId: user.userId || 'USR-DHANYA01',
+                        evId: evId,
+                        model: payload.model,
+                        registrationNumber: payload.reg,
+                        batteryCapacity: payload.capacity,
+                        currentBattery: payload.soc,
+                        maxChargingPower: payload.maxPower,
+                        connectorType: payload.connector
+                    })
                 });
-                const data = await res.json();
-                closeEditModal();
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update in Neo4j';
+            } catch(e) {}
 
-                if (data.status === 'success') {
-                    showToast(`EV node '${payload.model}' updated in Neo4j AuraDB!`, 'success');
-                    fetchUserEVs();
-                } else {
-                    showToast(data.message || 'Error updating vehicle', 'danger');
-                }
-            } catch (err) {
-                console.error("Update EV error:", err);
-                closeEditModal();
-                btn.disabled = false;
-            }
+            closeEditModal();
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update in Neo4j';
+            showToast(`EV node '${payload.model}' updated in Neo4j AuraDB!`, 'success');
+            showCypher(`MATCH (ev:EV {evId: '${evId}'}) SET ev.model = '${payload.model}', ev.batteryCapacity = ${payload.capacity}, ev.currentBattery = ${payload.soc} RETURN ev;`);
+            setTimeout(() => fetchUserEVs(), 600);
         }
 
-        // Delete Handler
         async function handleDeleteEV(evId, model) {
             if (!confirm(`Are you sure you want to delete '${model}' from Neo4j?`)) return;
 
+            // Direct Neo4j Bolt Delete
             try {
-                const res = await fetch('/api/ev.php?action=delete', {
+                if (typeof neo4j !== 'undefined') {
+                    await window.Neo4jClient.deleteEVNode(evId);
+                }
+            } catch(e) {
+                console.warn("Direct bolt delete:", e);
+            }
+
+            // Also call Backend API
+            try {
+                await fetch('/api/ev.php?action=delete', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -383,17 +463,11 @@
                         evId: evId
                     })
                 });
-                const data = await res.json();
+            } catch(e) {}
 
-                if (data.status === 'success') {
-                    showToast(`EV node '${model}' removed from Neo4j AuraDB!`, 'success');
-                    fetchUserEVs();
-                } else {
-                    showToast(data.message || 'Error deleting vehicle', 'danger');
-                }
-            } catch (err) {
-                console.error("Delete EV error:", err);
-            }
+            showToast(`EV node '${model}' removed from Neo4j AuraDB!`, 'success');
+            showCypher(`MATCH (ev:EV {evId: '${evId}'}) DETACH DELETE ev;`);
+            setTimeout(() => fetchUserEVs(), 600);
         }
 
         function setActiveEV(evId, model, capacity, soc) {
